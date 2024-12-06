@@ -1,0 +1,576 @@
+﻿:root {
+    --left: #1d1d1d;
+    --right: #2f2f2f;
+    --bg: #7e7e7e;
+    --logoA: #b2003b;
+    --logoB: #700227;
+    --logoC: #25000c;
+    --pink: #f7deff;
+    --text: #dddddd;
+}
+
+::-webkit-scrollbar {
+    background: var(--left);
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--logoB);
+    border-radius: 10px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--logoC);
+    }
+
+body {
+    background-color: var(--left);
+    background-image: url("../img/LoquitBGDark.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    position: relative;
+    min-height: 87vh;
+}
+
+
+.navbar {
+    background-color: var(--right) !important;
+    border-bottom: solid var(--logoA) 2px;
+}
+
+.navbar-name {
+    color: var(--logoA);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    margin-right: 20px
+}
+
+.nav-link {
+    color: var(--text) !important;
+}
+
+#logo {
+    height: 5rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+    a:hover {
+        color: var(--logoA);
+    }
+
+label {
+    color: var(--text);
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 1.5rem;
+}
+
+.main-container {
+    max-width: 70rem;
+    margin: 0 auto;
+}
+
+
+/* ------ left container ------ */
+
+.left-container {
+    width: 75%;
+    background-color: var(--left);
+    min-height: 100vh;
+}
+
+.lr-container-content {
+    margin: 7rem auto auto auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.post {
+    width: 98%;
+    margin: 0 1% 1%;
+    border: solid var(--logoA) 2px;
+    border-radius: 1rem 0 1rem 1rem;
+    padding: 12px;
+}
+
+.post-header {
+    width: 98%;
+    margin: 1% 1% 0;
+}
+
+.post-header2 {
+    width: 100%;
+    margin-top: 1%;
+}
+
+.post-header-info {
+    margin-bottom: 10px;
+}
+
+.pfp {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.pfp-small {
+    width: 40px;
+    height: 40px;
+}
+
+.pfp img {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.post-name {
+    font-weight: bolder;
+    color: var(--bg) !important;
+    margin: auto auto auto 10px;
+}
+
+.post-header-text {
+    font-size: 1rem;
+    font-weight: 400;
+    width: 100%;
+    margin: auto 0;
+    color: var(--text);
+}
+
+.post-header-options {
+    padding-left: 0.5rem;
+}
+
+.post-header-option {
+    margin: auto;
+    margin-left: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--bg);
+    height: 40px;
+    filter: brightness(0) saturate(100%) invert(50%) sepia(1%) saturate(0%) brightness(98%) contrast(98%);
+}
+
+.post-header-more {
+    margin: auto;
+    margin-left: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--bg);
+    height: 40px;
+}
+
+.option {
+    height: 20px;
+}
+
+.post-header-option:hover {
+    scale: 1.1;
+    filter: brightness(0) saturate(100%) invert(25%) sepia(86%) saturate(5830%) hue-rotate(329deg) brightness(67%) contrast(117%);
+    transition: 0.1s;
+}
+
+.dislike {
+    transform: rotateX(180deg);
+}
+
+.more-btn {
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: var(--bg);
+    border-radius: 10px;
+    margin: auto;
+}
+
+    .more-btn:hover {
+        scale: 1.1;
+        transition: 0.1s;
+        background-color: var(--left);
+        border: solid var(--logoB) 2px;
+    }
+
+        .more-btn:hover > .more {
+            filter: brightness(0) saturate(100%) invert(25%) sepia(86%) saturate(5830%) hue-rotate(329deg) brightness(67%) contrast(117%);
+        }
+
+button.show {
+    scale: 1.1;
+    background-color: var(--left) !important;
+    transition: 0.1s;
+    border: solid var(--logoB) 2px !important;
+}
+
+    button.show > .more {
+        filter: brightness(0) saturate(100%) invert(25%) sepia(86%) saturate(5830%) hue-rotate(329deg) brightness(67%) contrast(117%);
+    }
+
+.more {
+    width: 50%;
+    margin: 25%;
+    filter: invert(100%);
+}
+
+.post-image {
+    max-height: 500px;
+    width: 98%;
+    margin: 1%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+.post-image2 {
+    width: 98%;
+    margin: 1%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+
+.dropdown-menu {
+    border: solid var(--logoB) 2px;
+    border-radius: 1rem;
+    background-color: var(--left);
+}
+
+.dropdown-item {
+    color: var(--bg);
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+    .dropdown-item:hover {
+        color: var(--logoA);
+        background-color: var(--right);
+    }
+
+.normal-btn:hover {
+    background-color: var(--logoB) !important;
+}
+
+.normal-btn:focus {
+    background-color: var(--left);
+}
+
+.highlighted-button:hover {
+    background-color: var(--logoB) !important;
+}
+
+.highlighted-button:focus {
+    background-color: var(--logoA);
+}
+
+.warnings {
+    display: flex;
+    width: 100%
+}
+
+.spoiler {
+    color: var(--text);
+    font-style: italic;
+    font-weight: 600;
+}
+
+.nsfw {
+    color: var(--logoA);
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.edited {
+    margin-left: 1rem;
+}
+
+.time-post {
+    margin-left: auto;
+    color: var(--text);
+}
+
+/* ------ right container ------ */
+
+.right-container {
+    width: 25%;
+    background-color: var(--right);
+}
+
+.post-search {
+    margin: auto;
+    margin-bottom: 1rem;
+    width: 16rem;
+}
+
+.form-control {
+    height: 2rem;
+    border: 0;
+    border-radius: 3vw 3vw 3vw 3vw;
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: var(--left) !important;
+    color: var(--bg) !important;
+}
+
+
+.post-search-bar {
+    border-radius: 3vw 0 0 3vw;
+}
+
+
+
+.post-search-btn {
+    height: 2rem;
+    border: 0;
+    border-radius: 0 3vw 3vw 0;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--left);
+    color: var(--text);
+}
+
+    .post-search-btn:hover > .btn-image {
+        filter: invert(100%);
+    }
+
+.btn-image {
+    filter: invert(50%);
+}
+
+
+.btn-image {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+
+.create-post-btn {
+    background-color: var(--logoA);
+    color: var(--left);
+    font-weight: 400;
+    border: 0;
+    border-radius: 3vw;
+    width: 15.5rem;
+    outline: none !important;
+    box-shadow: none !important;
+    margin: 0 auto;
+}
+
+.col-md-4 {
+    margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+        .main-container > div:first-child {
+            order: 1;
+        }
+
+    .left-container {
+        width: 100%;
+        background-color: var(--right);
+    }
+
+        .left-container > div {
+            margin-top: 1rem;
+        }
+
+    .right-container {
+        width: 100%;
+    }
+}
+
+/* ------ forms ------ */
+
+.form-container-content {
+    margin: 7rem auto auto auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 60rem;
+    background-color: var(--right);
+    border-radius: 20px;
+    border: 1px var(--logoA) solid;
+    overflow: hidden;
+}
+
+    .form-container-content > .row {
+        margin: 0 2rem;
+    }
+
+
+.form-title {
+    font-size: 2rem;
+    align-content: center;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    color: var(--logoA);
+}
+
+.form-group {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-button {
+    display: flex;
+    justify-content: center;
+}
+
+hr {
+    color: var(--logoA);
+}
+
+.form-check-input {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+    .form-check-input:checked {
+        border: none;
+        background-color: var(--logoA);
+        box-shadow: none !important;
+    }
+
+    .form-check-input:active {
+        border-color: var(--logoA) !important;
+        box-shadow: none !important;
+    }
+
+textarea {
+    border-radius: 2rem !important;
+    resize: none;
+    overflow: hidden;
+}
+
+    textarea.form-control {
+        min-height: 7rem;
+    }
+
+.title {
+    font-size: 1.5rem;
+}
+
+/* ------ Comments ------ */
+
+.comments-container {
+    margin: 0 auto auto auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 50rem;
+}
+
+.comment-container {
+    margin: 1rem;
+    background-color: var(--right);
+    border-radius: 20px;
+    border: 1px var(--logoA) solid;
+    padding: 1rem;
+}
+
+.write-comment {
+    margin-top: 1rem;
+}
+
+.write-comment-btn {
+    height: 4rem;
+    width: 5rem;
+    border: 0;
+    border-radius: 0 1rem 1rem 0;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--right);
+    color: var(--text);
+    border-top: 1px var(--logoA) solid;
+    border-bottom: 1px var(--logoA) solid;
+    border-right: 1px var(--logoA) solid;
+}
+
+    .write-comment-btn > div {
+        margin: auto;
+    }
+
+.write-comment-bar {
+    min-height: 4rem !important;
+    background-color: var(--right) !important;
+    border-radius: 1rem 0 0 1rem !important;
+    width: 43rem;
+    border-left: 1px var(--logoA) solid;
+    border-top: 1px var(--logoA) solid;
+    border-bottom: 1px var(--logoA) solid;
+    padding: 0 0.5rem;
+}
+
+
+.body-text {
+    margin-bottom: 1%;
+    color: var(--text);
+}
+
+/* ------ Profile ------ */
+
+.profile {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.profile-user {
+    margin: auto 0;
+}
+
+.pfp-big {
+    width: 200px;
+    height: 200px;
+    align-content: center;
+    margin: auto;
+}
+
+.profile-name {
+    margin: 1rem auto;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 3rem;
+}
+
+.qualities {
+    margin: 0 auto 1rem;
+    min-width: 50%;
+    color: var(--text)
+}
+
+    .qualities > li {
+        display: flex;
+        flex-direction: row;
+        font-size: 1.5rem;
+    }
+
+.quality {
+    color: var(--logoA);
+    font-weight: 500;
+    margin-right: 20px;
+}
+

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Loquit</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+@using Loquit.Data.Entities
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<AppUser> SignInManager
+    @inject UserManager<AppUser> UserManager
+    @{
+        int theme = 1;
+        if (SignInManager.IsSignedIn(User))
+        {
+            var currentUser = await UserManager.GetUserAsync(User);
+            theme = currentUser.ColorThemeId;
+        }
+
+    }
+    @if (theme == 1)
+    {
+        <link rel="stylesheet" href="~/css/LightTheme.css" asp-append-version="true" />
+    } else if (theme == 2) {
+        <link rel="stylesheet" href="~/css/CrimsonTheme.css" asp-append-version="true" />
+    } else
+    {
+        <link rel="stylesheet" href="~/css/DarkTheme.css" asp-append-version="true" />
+    }
+    <link rel="icon" type="image/png" href="~/img/Loquit.png" sizes="640x640">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3 fixed-top">
+            <div class="container-fluid">
+                <img id="logo" src="~/img/Loquit.png"/>
+                <a class="navbar-name" asp-area="" asp-controller="Home" asp-action="Index">Loquit</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="midder container-fluid">
+        <main role="main" class="render-body screen">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

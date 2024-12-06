@@ -1,0 +1,122 @@
+﻿@using Loquit.Data.Entities
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<Loquit.Services.DTOs.PostDTO>
+
+@inject UserManager<AppUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+<div class="main-container d-flex justify-content-center">
+    <div class="left-container">
+        <div class="lr-container-content">
+            @foreach (var item in Model.Reverse())
+            {
+                var creator = await UserManager.FindByIdAsync(item.CreatorId);
+
+                <div class="post container-fluid d-flex justify-content-center flex-column">
+                    <div class="post-header d-flex justify-content-between flex-row">
+                        <div class="post-header-text">
+                            <div class="post-header-info d-flex flex-row justify-content-between">
+                                <a asp-route-username="@creator.UserName" asp-controller="Profile" asp-action="Index" class="post-user d-flex flex-row">
+                                    <span class="pfp pfp-small"><img src="~/uploads/@creator.ProfilePictureUrl" loading="lazy" /></span>
+                                    <span class="post-name">@creator.UserName</span>
+                                </a>
+                                <div class="post-header-options d-flex justify-content-between flex-row gap-2">
+                                    @if(currentUser != null)
+                                    {
+                                        <a href="javascript:void(0);" onclick="likePost(@item.Id, this)" class="post-header-option">
+                                            <img class="option like" src="@(item.LikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                            <div id="Like">@item.LikedBy.Count</div>
+                                        </a>
+                                        <a href="javascript:void(0);" onclick="dislikePost(@item.Id, this)" class="post-header-option">
+                                            <img class="option dislike" src="@(item.DislikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                            <div id="Dislike">@item.DislikedBy.Count</div>
+                                        </a>
+                                        
+                                    }
+                                    else
+                                    {
+                                        <a class="post-header-option">
+                                            <img class="option like" src="~/img/Like.png" loading="lazy" />
+                                            <div id="Like">@item.LikedBy.Count</div>
+                                        </a>
+                                        <a class="post-header-option">
+                                            <img class="option dislike" src="~/img/Like.png" loading="lazy" />
+                                            <div id="Dislike">@item.DislikedBy.Count</div>
+                                        </a>
+                                    }
+
+                                    
+                                    <a asp-area="" asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id" class="post-header-option">
+                                        <img class="option comment" src="~/img/Comment.png" loading="lazy" />
+                                        <div>@item.Comments.Count</div>
+                                    </a>
+                                    <div class="post-header-more">
+                                        <div class="dropdown">
+                                            <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img class="more" src="~/img/more.png" loading="lazy" />
+                                            </button>
+                                            @if (currentUser != null && currentUser.Id == creator.Id)
+                                            {
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a asp-action="Delete" asp-controller="Posts" asp-route-id="@item.Id" class="dropdown-item">Delete</a></li>
+                                                    <li><a asp-action="Edit" asp-controller="Posts" asp-route-id="@item.Id" class="dropdown-item">Edit</a></li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a asp-area="" asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id" class="title">
+                                @item.Title
+                            </a>
+                            <div class="warnings">
+                                @if (item.IsSpoiler)
+                                {
+                                    <div class="spoiler">Spoiler</div>
+                                }
+                                @if (item.IsNsfw)
+                                {
+                                    <div class="nsfw">NSFW</div>
+                                }
+                                <div class="time-post">
+
+                                    @item.TimeOfPosting.ToString("HH:mm:ss dd.M.yyyy")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (!item.IsNsfw && !item.IsSpoiler && item.PictureUrl != null)
+                    {
+                        <a asp-area="" asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id">
+                            <img class="post-image" src="~/uploads/@item.PictureUrl" loading="lazy" />
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="right-container">
+        <div class="lr-container-content">
+            <form class="post-search d-flex justify-content-center flex-row" method="get">
+                <div>
+                    <input type="text" name="searchQuery" class="post-search-bar form-control" placeholder="Search...">
+                </div>
+                <button type="submit" class="normal-btn post-search-btn btn btn-primary">
+                    <img src="~/img/lens.png" class="btn-image" />
+                </button>
+            </form>
+            @if(currentUser != null) {
+            <form class="d-flex justify-content-center flex-row">
+                <button asp-controller="Posts" asp-action="Create" type="submit" class="highlighted-button create-post-btn btn btn-primary">New Post</button>
+            </form>
+            }
+        </div>
+    </div>
+</div>
+

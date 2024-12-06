@@ -1,0 +1,186 @@
+﻿@using Loquit.Data.Entities
+@using Microsoft.AspNetCore.Identity
+@model Loquit.Services.DTOs.PostDTO
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@inject UserManager<AppUser> UserManager
+
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+<div class="form-container-content">
+    <div class="row">
+            @{
+                var creator = await UserManager.FindByIdAsync(Model.CreatorId);
+            }
+
+                
+                    <div class="post-header2 d-flex justify-content-between flex-row">
+                        <div class="post-header-text">
+                            <div class="post-header-info d-flex flex-row justify-content-between">
+                                <a asp-route-username="@creator.UserName" asp-controller="Profile" asp-action="Index" class="post-user d-flex flex-row">
+                                    <span class="pfp pfp-small"><img src="~/uploads/@creator.ProfilePictureUrl" loading="lazy" /></span>
+                                    <span class="post-name">@creator.UserName</span>
+                                </a>
+                                <div class="post-header-options d-flex justify-content-between flex-row gap-2">
+                        @if (currentUser != null)
+                        {
+                            <a href="javascript:void(0);" onclick="likePost(@Model.Id, this)" class="post-header-option">
+                                <img class="option like" src="@(Model.LikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                <div id="Like">@Model.LikedBy.Count</div>
+                            </a>
+                            <a href="javascript:void(0);" onclick="dislikePost(@Model.Id, this)" class="post-header-option">
+                                <img class="option dislike" src="@(Model.DislikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                <div id="Dislike">@Model.DislikedBy.Count</div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="post-header-option">
+                                <img class="option like" src="~/img/Like.png" loading="lazy" />
+                                <div>@Model.LikedBy.Count</div>
+                            </a>
+                            <a class="post-header-option">
+                                <img class="option dislike" src="~/img/Like.png" loading="lazy" />
+                                <div>@Model.DislikedBy.Count</div>
+                            </a>
+                        }
+                                    <div class="post-header-option">
+                                        <img class="option comment" src="~/img/Comment.png" loading="lazy" />
+                                    <div>@Model.Comments.Count</div>
+                                    </div>
+                                    <div class="post-header-more">
+                                        <div class="dropdown">
+                                            <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img class="more" src="~/img/more.png" loading="lazy" />
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                @if (currentUser != null && currentUser.Id == creator.Id)
+                                                {
+                                                <li><a asp-action="Delete" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Delete</a></li>
+                                                <li><a asp-action="Edit" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Edit</a></li>
+                                                }
+                                                <li><a class="dropdown-item" href="#">Save</a></li>
+                                                <li><a class="dropdown-item" href="#">Report</a></li>
+                                                <li><a class="dropdown-item" href="#">Block User</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title">
+                                @Model.Title
+                            </div>
+                <div class="warnings">
+                    @if (Model.IsSpoiler)
+                    {
+                        <div class="spoiler">Spoiler</div>
+                    }
+                    @if (Model.IsNsfw)
+                    {
+                        <div class="nsfw">NSFW</div>
+                    }
+                    @if (Model.IsEdited)
+                    {
+                        <div class="edited">[EDITED]</div>
+                    }
+                    <div class="time-post">
+
+                        @Model.TimeOfPosting.ToString("HH:mm:ss dd.M.yyyy")
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                     <div>
+            @if (Model.PictureUrl != null)
+            {
+                <img class="post-image2" src="~/uploads/@Model.PictureUrl" loading="lazy" />
+            }
+                        
+                    </div>
+        <div class="body-text">
+            @Model.BodyText
+        </div>
+            
+    </div>
+    </div>
+    @if (currentUser != null)
+                        {
+
+    <form asp-controller="Comments" asp-action="Create" method="post" class="write-comment d-flex justify-content-center flex-row">
+        <div>
+            <textarea name="Text" oninput="auto_grow(this)" TextMode="MultiLine" class="write-comment-bar"></textarea>
+        </div>
+        <input type="hidden" name="PostId" value="@Model.Id" />
+        <input type="hidden" name="CreatorId" value="@currentUser" />
+        <button type="submit" class="normal-btn write-comment-btn btn"><div>Create</div></button>
+    </form>
+
+                        }
+<div class="comments-container">
+    @foreach(var item in Model.Comments)
+    {
+        <div class="comment-container d-flex justify-content-between flex-row">
+            <div class="post-header-text">
+                <div class="post-header-info d-flex flex-row justify-content-between">
+                    <a asp-route-username="@item.Commenter.UserName" asp-controller="Profile" asp-action="Index" class="post-user d-flex flex-row">
+                        <span class="pfp pfp-small"><img src="~/uploads/@item.Commenter.ProfilePictureUrl" loading="lazy" /></span>
+                        <span class="post-name">@item.Commenter.UserName</span>
+                    </a>
+                    <div class="post-header-options d-flex justify-content-between flex-row gap-2">
+                        @if (currentUser != null)
+                        {
+                            <a href="javascript:void(0);" onclick="likeComment(@item.Id, this)" class="post-header-option">
+                                <img class="option like" src="@(item.LikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                <div id="Like">@item.LikedBy.Count</div>
+                            </a>
+                            <a href="javascript:void(0);" onclick="dislikeComment(@item.Id, this)" class="post-header-option">
+                                <img class="option dislike" src="@(item.DislikedBy.Any(el => el.UserId == currentUser.Id) ? "/img/LikeFull.png" : "/img/Like.png")" loading="lazy" />
+                                <div id="Dislike">@item.DislikedBy.Count</div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="post-header-option">
+                                <img class="option like" src="~/img/Like.png" loading="lazy" />
+                                <div>@item.LikedBy.Count</div>
+                            </a>
+                            <a class="post-header-option">
+                                <img class="option dislike" src="~/img/Like.png" loading="lazy" />
+                                <div>@item.DislikedBy.Count</div>
+                            </a>
+                        }
+                        <div class="post-header-more">
+                            <div class="dropdown">
+                                <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img class="more" src="~/img/more.png" loading="lazy" />
+                                </button>
+                                @if (currentUser != null && currentUser.Id == item.Commenter.Id)
+                                {   
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a asp-action="Delete" asp-controller="Comments" asp-route-id="@item.Id" class="dropdown-item">Delete</a></li>
+                                    </ul>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    @item.Text
+                </div>
+                <div class="warnings">
+                <div class="time-post">
+
+                    @item.TimeOfCommenting.ToString("HH:mm:ss dd.M.yyyy")
+                </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
