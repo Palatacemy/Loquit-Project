@@ -47,6 +47,7 @@ namespace Loquit.Data.Entities
         public int ColorThemeId { get; set; }
         public virtual ICollection<AppUser>? FriendRequestsSent { get; set; }
         public virtual ICollection<AppUser>? FriendRequestsReceived { get; set; }
+        public virtual ICollection<Invite>? InvitesReceived { get; set; }
     }
 }
 
