@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Loquit.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240414035351_AppSchema")]
-    partial class AppSchema
+    [Migration("20241215180629_upg01")]
+    partial class upg01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Loquit.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.Property<string>("BlacklistId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FriendsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("BlacklistId", "FriendsId");
+
+                    b.HasIndex("FriendsId");
+
+                    b.ToTable("AppUserAppUser");
+                });
 
             modelBuilder.Entity("AppUserBaseChat", b =>
                 {
@@ -169,6 +184,55 @@ namespace Loquit.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Dislikes");
+                });
+
+            modelBuilder.Entity("Loquit.Data.Entities.FriendRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("SentByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SentToUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SentByUserId");
+
+                    b.HasIndex("SentToUserId");
+
+                    b.ToTable("FriendRequests");
+                });
+
+            modelBuilder.Entity("Loquit.Data.Entities.Invite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Invite");
                 });
 
             modelBuilder.Entity("Loquit.Data.Entities.Like", b =>
@@ -572,6 +636,21 @@ namespace Loquit.Data.Migrations
                     b.HasDiscriminator().HasValue("AppUser");
                 });
 
+            modelBuilder.Entity("AppUserAppUser", b =>
+                {
+                    b.HasOne("Loquit.Data.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("BlacklistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Loquit.Data.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("FriendsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AppUserBaseChat", b =>
                 {
                     b.HasOne("Loquit.Data.Entities.Abstractions.BaseChat", null)
@@ -646,6 +725,44 @@ namespace Loquit.Data.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Loquit.Data.Entities.FriendRequest", b =>
+                {
+                    b.HasOne("Loquit.Data.Entities.AppUser", "SentByUser")
+                        .WithMany("FriendRequestsSent")
+                        .HasForeignKey("SentByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Loquit.Data.Entities.AppUser", "SentToUser")
+                        .WithMany("FriendRequestsReceived")
+                        .HasForeignKey("SentToUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SentByUser");
+
+                    b.Navigation("SentToUser");
+                });
+
+            modelBuilder.Entity("Loquit.Data.Entities.Invite", b =>
+                {
+                    b.HasOne("Loquit.Data.Entities.ChatTypes.GroupChat", "Chat")
+                        .WithMany("Invites")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Loquit.Data.Entities.AppUser", "User")
+                        .WithMany("InvitesReceived")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
 
                     b.Navigation("User");
                 });
@@ -780,9 +897,20 @@ namespace Loquit.Data.Migrations
                     b.Navigation("SavedBy");
                 });
 
+            modelBuilder.Entity("Loquit.Data.Entities.ChatTypes.GroupChat", b =>
+                {
+                    b.Navigation("Invites");
+                });
+
             modelBuilder.Entity("Loquit.Data.Entities.AppUser", b =>
                 {
                     b.Navigation("DislikedPosts");
+
+                    b.Navigation("FriendRequestsReceived");
+
+                    b.Navigation("FriendRequestsSent");
+
+                    b.Navigation("InvitesReceived");
 
                     b.Navigation("LikedPosts");
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Loquit.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AppSchema : Migration
+    public partial class upg01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,6 +98,29 @@ namespace Loquit.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppUserAppUser",
+                columns: table => new
+                {
+                    BlacklistId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FriendsId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserAppUser", x => new { x.BlacklistId, x.FriendsId });
+                    table.ForeignKey(
+                        name: "FK_AppUserAppUser_AspNetUsers_BlacklistId",
+                        column: x => x.BlacklistId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserAppUser_AspNetUsers_FriendsId",
+                        column: x => x.FriendsId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -183,6 +206,32 @@ namespace Loquit.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FriendRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SentByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SentToUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FriendRequests_AspNetUsers_SentByUserId",
+                        column: x => x.SentByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FriendRequests_AspNetUsers_SentToUserId",
+                        column: x => x.SentToUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
@@ -264,6 +313,32 @@ namespace Loquit.Data.Migrations
                         column: x => x.BaseChatId,
                         principalTable: "BaseChat",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invite",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invite", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invite_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Invite_BaseChat_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "BaseChat",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -394,6 +469,11 @@ namespace Loquit.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppUserAppUser_FriendsId",
+                table: "AppUserAppUser",
+                column: "FriendsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppUserBaseChat_MembersId",
                 table: "AppUserBaseChat",
                 column: "MembersId");
@@ -478,6 +558,26 @@ namespace Loquit.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FriendRequests_SentByUserId",
+                table: "FriendRequests",
+                column: "SentByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendRequests_SentToUserId",
+                table: "FriendRequests",
+                column: "SentToUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invite_ChatId",
+                table: "Invite",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invite_UserId",
+                table: "Invite",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Likes_CommentId",
                 table: "Likes",
                 column: "CommentId");
@@ -512,6 +612,9 @@ namespace Loquit.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AppUserAppUser");
+
+            migrationBuilder.DropTable(
                 name: "AppUserBaseChat");
 
             migrationBuilder.DropTable(
@@ -534,6 +637,12 @@ namespace Loquit.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dislikes");
+
+            migrationBuilder.DropTable(
+                name: "FriendRequests");
+
+            migrationBuilder.DropTable(
+                name: "Invite");
 
             migrationBuilder.DropTable(
                 name: "Likes");

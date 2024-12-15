@@ -24,6 +24,7 @@ namespace Loquit.Data
         public DbSet<Dislike> Dislikes { get; set; }
         public DbSet<Save> Saves { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -37,6 +38,17 @@ namespace Loquit.Data
                 .WithMany(m => m.Replies)
                 .HasForeignKey(m => m.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<FriendRequest>()
+                .HasOne(l => l.SentByUser)
+                .WithMany(p => p.FriendRequestsSent)
+                .HasForeignKey(l => l.SentByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<FriendRequest>()
+                .HasOne(l => l.SentToUser)
+                .WithMany(u => u.FriendRequestsReceived)
+                .HasForeignKey(l => l.SentToUserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Like>()
             .HasOne(l => l.Post)

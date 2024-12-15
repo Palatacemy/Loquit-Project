@@ -25,8 +25,8 @@ namespace Loquit.Data.Entities
             EvaluationPreferences = [0.3, 0.3, 0.3, 0.3, 0.3];
             AllowNsfw = false;
             ColorThemeId = 1;
-            FriendRequestsSent = new HashSet<AppUser>();
-            FriendRequestsReceived = new HashSet<AppUser>();
+            FriendRequestsSent = new HashSet<FriendRequest>();
+            FriendRequestsReceived = new HashSet<FriendRequest>();
             ProfilePictureUrl = "user.png";
         }
         public string? FirstName { get; set; }
@@ -45,8 +45,8 @@ namespace Loquit.Data.Entities
         public double[] EvaluationPreferences { get; set; }
         public bool AllowNsfw { get; set; }
         public int ColorThemeId { get; set; }
-        public virtual ICollection<AppUser>? FriendRequestsSent { get; set; }
-        public virtual ICollection<AppUser>? FriendRequestsReceived { get; set; }
+        public virtual ICollection<FriendRequest>? FriendRequestsSent { get; set; }
+        public virtual ICollection<FriendRequest>? FriendRequestsReceived { get; set; }
         public virtual ICollection<Invite>? InvitesReceived { get; set; }
     }
 }
