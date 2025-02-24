@@ -1,4 +1,4 @@
-﻿using Loquit.Data.Entities.Abstractions;
+﻿    using Loquit.Data.Entities.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace Loquit.Data.Entities
             Dislikes = 0;
         }
         public string Text { get; set; }
+        public string CommenterId { get; set; }
         public virtual AppUser? Commenter { get; set; }
         public DateTime TimeOfCommenting { get; set; }
         public bool IsEdited { get; set; }

@@ -112,12 +112,11 @@
     @if (currentUser != null)
                         {
 
-    <form asp-controller="Comments" asp-action="Create" method="post" class="write-comment d-flex justify-content-center flex-row">
+    <form asp-controller="Comments" asp-action="Create" method="post" class="write-comment d-flex justify-content-center flex-row" onsubmit="return validateForm()">
         <div>
             <textarea name="Text" oninput="auto_grow(this)" TextMode="MultiLine" class="write-comment-bar"></textarea>
         </div>
         <input type="hidden" name="PostId" value="@Model.Id" />
-        <input type="hidden" name="CreatorId" value="@currentUser" />
         <button type="submit" class="normal-btn write-comment-btn btn"><div>Create</div></button>
     </form>
 

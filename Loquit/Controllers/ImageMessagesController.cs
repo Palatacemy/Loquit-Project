@@ -9,19 +9,26 @@ using Loquit.Data;
 using Loquit.Data.Entities.MessageTypes;
 using Loquit.Data.Entities.Abstractions;
 using Loquit.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
+using Loquit.Services.Services.Abstractions.MessageTypesAbstractions;
 
 namespace Loquit.Web.Controllers
 {
     public class ImageMessagesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IImageMessageService _imageMessageService;
+        private readonly IDirectChatService _directChatService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ImageMessagesController(ApplicationDbContext context)
+        public ImageMessagesController(IImageMessageService imageMessageService, IDirectChatService directChatService, UserManager<AppUser> userManager)
         {
-            _context = context;
+            _imageMessageService = imageMessageService;
+            _directChatService = directChatService;
+            _userManager = userManager;
         }
 
-        // GET: ImageMessages
+      /*  // GET: ImageMessages
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.ImageMessages.Include(i => i.SenderUser);
@@ -65,6 +72,7 @@ namespace Loquit.Web.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(imageMessage);
+                imageMessage.SenderUser.MessagesWritten++;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -162,6 +170,6 @@ namespace Loquit.Web.Controllers
         private bool ImageMessageExists(int id)
         {
             return _context.ImageMessages.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

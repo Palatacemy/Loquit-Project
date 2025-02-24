@@ -13,6 +13,7 @@ namespace Loquit.Services.DTOs
         public PostDTO()
         {
             Evaluations = [0, 0, 0, 0, 0];
+            CategoryId = 0;
             IsEdited = false;
             IsNsfw = false;
             IsSpoiler = false;

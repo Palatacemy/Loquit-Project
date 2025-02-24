@@ -14,7 +14,11 @@
         if (SignInManager.IsSignedIn(User))
         {
             var currentUser = await UserManager.GetUserAsync(User);
-            theme = currentUser.ColorThemeId;
+            
+            if (currentUser!=null) {
+                theme = currentUser.ColorThemeId;
+            }
+            
         }
 
     }
@@ -46,7 +50,7 @@
         </nav>
     </header>
     <div class="midder container-fluid">
-        <main role="main" class="render-body screen">
+        <main role="main" class="main render-body screen">
             @RenderBody()
         </main>
     </div>

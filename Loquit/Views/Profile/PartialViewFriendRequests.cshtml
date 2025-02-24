@@ -1,0 +1,104 @@
+﻿@using Loquit.Data.Entities
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<AppUser> UserManager
+
+@{
+
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+@if (Model != "") {
+    <div class="friend-requests-received">
+        @foreach (var item in currentUser.FriendRequestsReceived.Select(e => e.SentByUser).Where(e => e.UserName.ToLower().Contains(Model.ToLower())).ToList())
+        {
+            <div class="friend-request container-fluid d-flex justify-content-center flex-column">
+                <div class="post-header d-flex justify-content-between flex-row">
+                    <div class="post-header-text">
+                        <div class="post-header-info d-flex flex-row justify-content-between">
+                            <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                                <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                                <span class="post-name">@item.UserName</span>
+                            </a>
+                            <a href="javascript:void(0)" onclick="acceptFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#10004
+                            </a>
+                            <a href="javascript:void(0)" onclick="declineFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#10006
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br>
+    <div>
+        @foreach (var item in currentUser.FriendRequestsSent.Select(e => e.SentToUser).Where(e => e.UserName.ToLower().Contains(Model.ToLower())).ToList())
+        {
+            <div class="friend-request container-fluid d-flex justify-content-center flex-column">
+                <div class="post-header d-flex justify-content-between flex-row">
+                    <div class="post-header-text">
+                        <div class="post-header-info d-flex flex-row justify-content-between">
+                            <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                                <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                                <span class="post-name">@item.UserName</span>
+                            </a>
+    
+                            <a href="javascript:void(0)" onclick="cancelFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#9003
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else{
+    <div class="friend-requests-received">
+        @foreach (var item in currentUser.FriendRequestsReceived.Select(e => e.SentByUser).ToList())
+        {
+            <div class="friend-request container-fluid d-flex justify-content-center flex-column">
+                <div class="post-header d-flex justify-content-between flex-row">
+                    <div class="post-header-text">
+                        <div class="post-header-info d-flex flex-row justify-content-between">
+                            <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                                <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                                <span class="post-name">@item.UserName</span>
+                            </a>
+                            <a href="javascript:void(0)" onclick="acceptFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#10004
+                            </a>
+                            <a href="javascript:void(0)" onclick="declineFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#10006
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br>
+    <div>
+        @foreach (var item in currentUser.FriendRequestsSent.Select(e => e.SentToUser).ToList())
+        {
+            <div class="friend-request container-fluid d-flex justify-content-center flex-column">
+                <div class="post-header d-flex justify-content-between flex-row">
+                    <div class="post-header-text">
+                        <div class="post-header-info d-flex flex-row justify-content-between">
+                            <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                                <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                                <span class="post-name">@item.UserName</span>
+                            </a>
+
+                            <a href="javascript:void(0)" onclick="cancelFriendRequest('@item.Id', () => reloadFriends())" class="friend-header-option">
+                                &#9003
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

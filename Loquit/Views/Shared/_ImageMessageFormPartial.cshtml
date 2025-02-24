@@ -1,0 +1,16 @@
+﻿@using Loquit.Web.Models
+
+@model SendMessageViewModel
+
+@{
+    var chatId = Model.ChatId;
+}
+
+<form asp-controller="DirectChats" asp-action="SendMessage" method="post" enctype="multipart/form-data" class="write-message">
+    <input type="hidden" asp-for="ChatId" value="@chatId"/>
+    <input type="hidden" asp-for="MessageType" value="image" />
+    <input type="file" asp-for="ImageFile" />
+    <button type="submit" class="normal-btn image-message-button btn">
+        <div>Send Image</div>
+    </button>
+</form>

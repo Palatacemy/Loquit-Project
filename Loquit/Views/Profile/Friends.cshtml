@@ -1,0 +1,37 @@
+﻿@using Loquit.Data.Entities;
+@using Microsoft.AspNetCore.Identity;
+@model Loquit.Data.Entities.AppUser;
+@{
+    ViewData["Title"] = "Friends";
+}
+
+@inject UserManager<AppUser> UserManager;
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+<div class="main-container d-flex justify-content-center">
+    <div class="left-container">
+        <div class="lr-container-content">
+            <div class="friends">
+                @await Html.PartialAsync("PartialViewFriends", "")
+            </div>
+        </div>
+    </div>
+    <div class="right-container">
+        <div class="lr-container-content">
+            <form class="post-search d-flex justify-content-center flex-row" method="get">
+                <div>
+                    <input type="text" name="username" class="post-search-bar form-control" oninput="updateUrl(this)" placeholder="Search..." autocomplete="off">
+                </div>
+                <button type="submit" class="normal-btn post-search-btn btn btn-primary">
+                    <img src="~/img/lens.png" class="btn-image" />
+                </button>
+            </form>
+            <div class="friend-requests">
+                @await Html.PartialAsync("PartialViewFriendRequests", "")
+            </div>
+        </div>
+    </div>
+</div>

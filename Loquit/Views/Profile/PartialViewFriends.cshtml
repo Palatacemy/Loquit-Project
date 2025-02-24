@@ -1,0 +1,73 @@
+﻿@using Loquit.Data.Entities
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<AppUser> UserManager;
+
+@model string;
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+@if (Model != null)
+{
+    foreach (var item in currentUser.Friends.Where(e => e.UserName.ToLower().Contains(Model.ToLower())))
+    {
+        <div class="post container-fluid d-flex justify-content-center flex-column">
+            <div class="d-flex justify-content-between flex-row">
+                <div class="post-header-text">
+                    <div class="post-header-info d-flex flex-row justify-content-between">
+                        <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                            <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                            <span class="post-name">@item.UserName</span>
+                        </a>
+                        <a asp-route-id="@item.Id" asp-controller="DirectChats" asp-action="CreateChat" class="friend-header-option">
+                            <img class="option comment" src="~/img/Comment.png" loading="lazy" />
+                        </a>
+                        <div class="friend-header-more">
+                            <div class="dropdown">
+                                <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img class="more" src="~/img/more.png" loading="lazy" />
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a href="javascript:void(0)" onclick="removeFriend('@item.Id', () => reloadFriends())" class="dropdown-item">Remove</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else {
+    foreach (var item in currentUser.Friends)
+    {
+        <div class="post container-fluid d-flex justify-content-center flex-column">
+            <div class="d-flex justify-content-between flex-row">
+                <div class="post-header-text">
+                    <div class="post-header-info d-flex flex-row justify-content-between">
+                        <a asp-route-username="@item.UserName" asp-controller="Profile" asp-action="Index" class="friend-user d-flex flex-row">
+                            <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
+                            <span class="post-name">@item.UserName</span>
+                        </a>
+
+                        <a asp-route-id="@item.Id" asp-controller="DirectChats" asp-action="CreateChat" class="friend-header-option">
+                            <img class="option comment" src="~/img/Comment.png" loading="lazy" />
+                        </a>
+                        <div class="friend-header-more">
+                            <div class="dropdown">
+                                <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img class="more" src="~/img/more.png" loading="lazy" />
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a href="javascript:void(0)" onclick="removeFriend('@item.Id', () => reloadFriends())" class="dropdown-item">Remove</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -9,10 +9,12 @@ using Loquit.Data;
 using Loquit.Data.Entities;
 using Loquit.Utils;
 using Microsoft.Extensions.Hosting;
-using Loquit.Services.Abstractions;
 using Loquit.Services.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Loquit.Services.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Loquit.Services.Services.Abstractions;
 
 namespace Loquit.Web.Controllers
 {
@@ -98,6 +100,7 @@ namespace Loquit.Web.Controllers
                 comment.TimeOfCommenting = DateTime.Now;
                 comment.Commenter = await _userManager.GetUserAsync(User);
                 await _commentService.AddCommentAsync(comment);
+                comment.Commenter.CommentsWritten++;
                 return RedirectToAction("Details", "Posts", new { id = comment.PostId });
             }
             return View(comment);

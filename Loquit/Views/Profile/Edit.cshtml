@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" type="email" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label">Text</label>
@@ -31,9 +31,9 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" type="date" class="form-control" maxlength="200" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" type="date" class="form-control" maxlength="200" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="hidden" asp-for="ProfilePictureUrl" />
@@ -48,9 +48,14 @@
                     <option value="2">Crimson Theme</option>
                     <option value="3">Dark Theme</option>
                 </select>
-            </div> 
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AllowNsfw" /> Allow NSFW
+                </label>
+            </div>
             <div class="form-group form-button">
-                <input type="submit" value="Edit" class="highlighted-button create-post-btn btn" />
+                <input type="submit" value="Confirm" class="highlighted-button create-post-btn btn" />
             </div>
         </form>
     </div>

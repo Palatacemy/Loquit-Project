@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Loquit.Data.Entities;
 using Loquit.Data.Repositories.Abstractions;
-using Loquit.Services.Abstractions;
 using Loquit.Services.DTOs;
+using Loquit.Services.Services.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace Loquit.Services.Services
 {
     public class PostService : IPostService
     {
-        private readonly ICrudRepository<Post> _postRepository;
+        private readonly IPostRepository _postRepository;
         private readonly ICrudRepository<Like> _likeRepository;
         private readonly ICrudRepository<Dislike> _dislikeRepository;
         private readonly IMapper _mapper;
-        public PostService(ICrudRepository<Post> postRepository, ICrudRepository<Like> likeRepository, ICrudRepository<Dislike> dislikeRepository, IMapper mapper)
+        public PostService(IPostRepository postRepository, ICrudRepository<Like> likeRepository, ICrudRepository<Dislike> dislikeRepository, IMapper mapper)
         {
             _postRepository = postRepository;
             _likeRepository = likeRepository;
@@ -47,6 +47,13 @@ namespace Loquit.Services.Services
         public async Task<List<PostDTO>> GetPostsAsync()
         {
             var posts = (await _postRepository.GetAllAsync())
+                .ToList();
+            return _mapper.Map<List<PostDTO>>(posts);
+        }
+
+        public async Task<List<PostDTO>> GetPostsByAlgorithmAsync(bool allowNsfw, double[] categoryPreferences, double[] evaluationPreference, int[] recentlyOpenedPostsIds)
+        {
+            var posts = (await _postRepository.GetPostsByAlgorithmAsync(allowNsfw, categoryPreferences, evaluationPreference, recentlyOpenedPostsIds))
                 .ToList();
             return _mapper.Map<List<PostDTO>>(posts);
         }

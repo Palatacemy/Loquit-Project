@@ -9,19 +9,44 @@ using Loquit.Data;
 using Loquit.Data.Entities.MessageTypes;
 using Loquit.Data.Entities.Abstractions;
 using Loquit.Data.Entities;
+using Loquit.Services.DTOs;
+using Microsoft.AspNetCore.Identity;
+using Loquit.Services.DTOs.MessageTypesDTOs;
+using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
+using Loquit.Services.Services.Abstractions.MessageTypesAbstractions;
 
 namespace Loquit.Web.Controllers
 {
     public class TextMessagesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITextMessageService _textMessageService;
+        private readonly IDirectChatService _directChatService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public TextMessagesController(ApplicationDbContext context)
+        public TextMessagesController(ITextMessageService textMessageService, IDirectChatService directChatService, UserManager<AppUser> userManager)
         {
-            _context = context;
+            _textMessageService = textMessageService;
+            _directChatService = directChatService;
+            _userManager = userManager;
         }
 
-        // GET: TextMessages
+        /* [HttpPost]
+         [ValidateAntiForgeryToken]*/
+        /*public async Task<IActionResult> Create(TextMessageDTO textMessage)
+        {
+            if (ModelState.IsValid)
+            {
+                textMessage.TimeOfSending  = DateTime.Now;
+                textMessage.SenderUser = await _userManager.GetUserAsync(User);
+                await _textMessageService.AddTextMessageAsync(textMessage);
+                textMessage.SenderUser.MessagesWritten++;
+                var directChat = await _directChatService.GetDirectChatByIdAsync(textMessage.)
+                return PartialView("PartialViewDirectChat", );
+            }
+            return NotFound();
+        }*/
+
+        /*// GET: TextMessages
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.TextMessages.Include(t => t.SenderUser);
@@ -65,6 +90,7 @@ namespace Loquit.Web.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(textMessage);
+                textMessage.SenderUser.MessagesWritten++;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -162,6 +188,6 @@ namespace Loquit.Web.Controllers
         private bool TextMessageExists(int id)
         {
             return _context.TextMessages.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

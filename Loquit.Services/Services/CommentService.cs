@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Loquit.Data.Entities;
 using Loquit.Data.Repositories.Abstractions;
-using Loquit.Services.Abstractions;
 using Loquit.Services.DTOs;
+using Loquit.Services.Services.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

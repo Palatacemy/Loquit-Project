@@ -10,9 +10,9 @@ using Loquit.Data.Entities;
 using Loquit.Web.Models;
 using Loquit.Utils;
 using Microsoft.Extensions.Hosting;
-using Loquit.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Loquit.Services.DTOs;
+using Loquit.Services.Services.Abstractions;
 
 namespace Loquit.Web.Controllers
 {
@@ -84,7 +84,13 @@ namespace Loquit.Web.Controllers
             {
                 return NotFound();
             }
-
+            if (await _userManager.GetUserAsync(User) != null)
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                currentUser.RecentlyOpenedPostsIds[currentUser.PostsRead % 50] = post.Id;
+                currentUser.PostsRead++;
+                await _userManager.UpdateAsync(currentUser);
+            }
             return View(post);
         }
 
@@ -116,6 +122,9 @@ namespace Loquit.Web.Controllers
                 }
                 post.TimeOfPosting = DateTime.Now;
                 await _postService.AddPostAsync(post);
+                var currentUser = await _userManager.FindByIdAsync(post.CreatorId);
+                currentUser.PostsWritten++;
+                await _userManager.UpdateAsync(currentUser);
                 return RedirectToAction("Index", "Home");
             }
             return View(post);

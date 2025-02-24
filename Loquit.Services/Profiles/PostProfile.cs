@@ -20,10 +20,10 @@ namespace Loquit.Services.Profiles
 }
 
 /*
- * Categories:
--food           id:0
--music          id:1
--art            id:2
+Categories:
+-(default)      id:0
+-food           id:1
+-music/art      id:2
 -nature         id:3
 -pets           id:4
 -videogames     id:5
@@ -41,7 +41,7 @@ Evaluations:
 -politics         0 neutral --- biased 1
 -mood             0 sad     --- happy  1
 -eval_3           0 calm    --- a lot  1
--brainrot         0 low     --- tiktok 1
+-trend            0 low     --- tiktok 1
 -controversial    0 safe    --- a lot  1
 
 

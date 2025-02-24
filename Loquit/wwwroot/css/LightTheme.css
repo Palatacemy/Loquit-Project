@@ -80,7 +80,7 @@ label {
 }
 
 
-/* ------ left container ------ */
+/* ------ left container post ------ */
 
 .left-container {
     width: 75%;
@@ -104,7 +104,7 @@ label {
 
 .post-header {
     width: 98%;
-    margin: 1% 1% 0;
+  margin: 1% 1% 0;
 }
 
 .post-header2 {
@@ -113,10 +113,12 @@ label {
 }
 
 .post-header-info {
-    margin-bottom: 10px;
+/*    margin-bottom: 10px;*/
 }
 
 .pfp {
+    display:flex;
+    justify-content:center;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
@@ -130,7 +132,6 @@ label {
 .pfp img {
     position: absolute;
     height: 100%;
-    left: 0;
     top: 0;
 }
 
@@ -164,9 +165,8 @@ label {
 }
 
 .post-header-more {
-    margin: auto;
     margin-left: 10px;
-    text-align: center;
+    align-content: center;
     font-size: 1rem;
     font-weight: bold;
     color: var(--bg);
@@ -300,8 +300,44 @@ button.show {
     color: var(--text);
 }
 
-/* ------ right container ------ */
+/* ------ left container friends ------ */
 
+
+.friend-header-option {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--bg);
+    height: 40px;
+    filter: brightness(0) saturate(100%) invert(50%) sepia(1%) saturate(0%) brightness(98%) contrast(98%);
+}
+.friend-header-more {
+    margin-left: 20px;
+    align-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--bg);
+    height: 40px;
+}
+
+.friend-user {
+    margin-right: auto
+}
+
+
+
+/* ------ right container friends ------ */
+
+.friend-request {
+    width: 98%;
+    margin: 0 1% 1%;
+    padding: 12px;
+}
+
+/* ------ right container posts ------ */
 .right-container {
     width: 25%;
     background-color: var(--right);
@@ -314,7 +350,6 @@ button.show {
 }
 
 .form-control {
-    height: 2rem;
     border: 0;
     border-radius: 3vw 3vw 3vw 3vw;
     outline: none !important;
@@ -331,7 +366,7 @@ button.show {
 
 
 .post-search-btn {
-    height: 2rem;
+    height: 36px;
     border: 0;
     border-radius: 0 3vw 3vw 0;
     outline: none !important;
@@ -514,9 +549,7 @@ textarea.form-control {
     background-color: var(--right) !important;
     border-radius: 1rem 0 0 1rem !important;
     width: 43rem;
-    border-left: 1px var(--logoA) solid;
-    border-top: 1px var(--logoA) solid;
-    border-bottom: 1px var(--logoA) solid;
+    border: 1px var(--logoA) solid;
     padding: 0 0.5rem;
 }
 
@@ -572,3 +605,123 @@ textarea.form-control {
     margin-right: 20px;
 }
 
+/* ------ DirectChats ------ */
+
+.messages {
+    height: 70%;
+    margin: 0 0 1rem;
+    background-color: var(--left);
+    width: 90%;
+    border-radius: 1rem;
+    border: 2px solid var(--logoA);
+    overflow-y: scroll;
+}
+
+.message-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    max-width: 80%;
+}
+
+.message-content {
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.current-user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.current-user .message-content {
+    background-color: var(--logoB);
+    color: white;
+    text-align: right;
+}
+
+.other-user {
+    align-self: flex-start;
+    flex-direction: row;
+}
+
+.other-user .message-content {
+    background-color: var(--left);
+    color: black;
+    text-align: left;
+}
+
+.write-message {
+    margin: 1rem;
+}
+
+.message-text {
+    padding: 10px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.message-image {
+    display: block;
+    max-height: 250px;
+    max-height: 250px;
+    margin: 1%;
+    object-fit: cover;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.message-time {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: 5px;
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.write-message-container {
+    min-height: 60px;
+    max-height: 12rem;
+    width: 38rem;
+    padding: 10px;
+    border-radius: 1rem 0 0 1rem !important;
+    border: 1px var(--logoA) solid;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+.write-message-btn {
+    height: 70px;
+    width: 5rem;
+    border-radius: 0 1rem 1rem 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--right);
+    color: var(--text);
+    border-top: 1px var(--logoA) solid;
+    border-bottom: 1px var(--logoA) solid;
+    border-right: 1px var(--logoA) solid;
+}
+
+.write-message-btn > div {
+    margin: auto;
+}
+
+.image-message-btn {
+    height: 70px;
+    width: 5rem;
+    border-radius: 1rem !important;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--right);
+    color: var(--text);
+    border: 1px var(--logoA) solid;
+}

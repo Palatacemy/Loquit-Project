@@ -1,0 +1,18 @@
+﻿@using Loquit.Web.Models;
+@using Loquit.Services.DTOs
+@using Loquit.Services.DTOs.ChatTypesDTOs;
+
+@model CurrentChatViewModel;
+
+@if (Model != null) {
+    <div class="messages">
+        <partial name="_DirectChatMessagesPartial" model="Model" />
+    </div>
+    <div style="height: 20%">
+        <partial name="_TextMessageFormPartial" model="new SendMessageViewModel()" />
+        <partial name="_ImageMessageFormPartial" model="new SendMessageViewModel()" />
+    </div>
+}
+else {
+    <h1 class="d-flex justify-content-start align-items-center">No one to chat with</h1>
+}

@@ -1,29 +1,42 @@
-﻿@model IEnumerable<Loquit.Data.Entities.ChatTypes.DirectChat>
+﻿@using Loquit.Services.DTOs;
+@using Loquit.Data.Entities;
+@using Microsoft.AspNetCore.Identity;
+@using Loquit.Services.DTOs.ChatTypesDTOs;
+@using Loquit.Web.Models;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Messages";
 }
 
-<h1>Index</h1>
+@model DirectChatViewModel
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="main-container d-flex justify-content-center">
+    <div class="right-container">
+        <div class="lr-container-content">
+            <form class="post-search d-flex justify-content-center flex-row" method="get">
+                <div>
+                    <input type="text" name="searchQuery" class="post-search-bar form-control" placeholder="Search...">
+                </div>
+                <button type="submit" class="normal-btn post-search-btn btn btn-primary">
+                    <img src="~/img/lens.png" class="btn-image" />
+                </button>
+            </form>
+
+            @await Html.PartialAsync("PartialViewDirectChats", Model.ChatsList.DirectChats)
+
+        </div>
+    </div>
+    <div class="left-container">
+        <div class="lr-container-content d-flex justify-content-start align-items-center" style="height: 90%">
+            @if (Model.ChatsList.DirectChats.Any())
+            {
+                @await Html.PartialAsync("PartialViewDirectChat", Model.CurrentChat)
+            }
+            else
+            {
+                <h3 class="d-flex">No chats available.</h3>
+            }
+        </div>
+    </div>
+</div>
+

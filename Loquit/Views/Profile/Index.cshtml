@@ -1,5 +1,7 @@
 ﻿@using Loquit.Data.Entities
-@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity;
+@model Loquit.Data.Entities.AppUser;
+
 @{
     ViewData["Title"] = "Profile";
 }
@@ -8,6 +10,7 @@
 @{
     var currentUser = await UserManager.GetUserAsync(User);
 }
+
 
 <div class="form-container-content">
     <div class="profile">
@@ -21,12 +24,8 @@
             <li><div class="quality">Date of Birth:</div>@Model.DateOfBirth</li>
             <li><div class="quality">About me:     </div>@Model.Description</li>
         </ul>
-        @if (currentUser != null && currentUser.Id == Model.Id)
-        {
-            <form class="d-flex justify-content-center" asp-action="Edit" asp-controller="Profile" asp-route-username="@Model.UserName" method="post" enctype="multipart/form-data">
-                <button style="margin: 0 auto" type="submit" class="highlighted-button create-post-btn btn">Edit</button>
-            </form>
-        }
-
+        <div id="partialViewContainer" style="display:flex; justify-content: center">
+            @await Html.PartialAsync("PartialViewProfile", Model)
+        </div>
     </div>
 </div>

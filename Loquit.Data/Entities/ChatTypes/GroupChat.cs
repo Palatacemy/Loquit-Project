@@ -13,6 +13,5 @@ namespace Loquit.Data.Entities.ChatTypes
         public string GroupName { get; set; }
         public DateOnly DateOfCreation { get; set; }
         public string PictureUrl { get; set; }
-        public virtual ICollection<Invite>? Invites { get; set; }
     }
 }

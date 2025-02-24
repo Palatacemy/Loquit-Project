@@ -1,0 +1,36 @@
+﻿@using Loquit.Data.Entities
+@using Microsoft.AspNetCore.Identity;
+@model Loquit.Data.Entities.AppUser;
+
+@inject UserManager<AppUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+@if (currentUser != null && currentUser.Id == Model.Id)
+{
+    <form class="d-flex justify-content-center" asp-action="Edit" asp-controller="Profile" asp-route-username="@Model.UserName" method="post" enctype="multipart/form-data" style="display:flex">
+        <button style="margin: 0 auto" type="submit" class="highlighted-button create-post-btn btn">Edit</button>
+    </form>
+}
+else if (currentUser != null)
+{
+    if (Model.Friends.Any(r => r.Id == currentUser.Id))
+    {
+        <button style="margin: 0 auto" onclick="removeFriend('@Model.Id', () => reloadProfile('@Model.Id'));" class="highlighted-button create-post-btn btn">Remove from friends</button>
+    }
+    else if (Model.FriendRequestsReceived.Any(r => r.SentByUserId == currentUser.Id))
+    {
+        <button style="margin: 0 auto" onclick="cancelFriendRequest('@Model.Id', () => reloadProfile('@Model.Id'));" class="highlighted-button create-post-btn btn">Cancel friend request</button>
+    }
+    else if (Model.FriendRequestsSent.Any(r => r.SentToUserId == currentUser.Id))
+    {
+        <button style="margin: 0 auto" onclick="acceptFriendRequest('@Model.Id', () => reloadProfile('@Model.Id'));" class="highlighted-button create-post-btn btn">Accept friend request</button>
+        <button style="margin: 0 auto" onclick="declineFriendRequest('@Model.Id', () => reloadProfile('@Model.Id'));" class="highlighted-button create-post-btn btn">Decline friend request</button>
+    }
+    else
+    {
+        <button style="margin: 0 auto" onclick="sendFriendRequest('@Model.Id', () => reloadProfile('@Model.Id'));" class="highlighted-button create-post-btn btn">Send friend request</button>
+    }
+}

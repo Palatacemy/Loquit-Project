@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Loquit.Data.Entities.ChatTypes;
 using Loquit.Data.Repositories.Abstractions;
-using Loquit.Services.Abstractions.ChatTypesAbstractions;
 using Loquit.Services.DTOs.ChatTypesDTOs;
+using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

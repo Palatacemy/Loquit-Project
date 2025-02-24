@@ -1,0 +1,53 @@
+﻿@using Loquit.Services.DTOs.ChatTypesDTOs;
+@using Loquit.Services.DTOs.MessageTypesDTOs;
+@using Loquit.Services.DTOs.AbstracionsDTOs;
+@using Loquit.Data.Entities;
+@using Loquit.Web.Models;
+@using Microsoft.AspNetCore.Identity;
+
+
+@model CurrentChatViewModel;
+
+@{
+    string? previousSenderId = null;
+}
+
+@foreach (var item in Model.Messages)
+{
+    bool isCurrentUser = (item.SenderUserId == Model.CurrentUser.Id);
+    var messageClass = isCurrentUser ? "message-container current-user" : "message-container other-user";
+
+    bool showProfilePicture = (previousSenderId != item.SenderUserId);
+    previousSenderId = item.SenderUserId;
+
+    <div class="@messageClass">
+        @if (!isCurrentUser && showProfilePicture)
+        {
+            <div class="pfp pfp-small">
+                <img src="~/uploads/@item.SenderUser.ProfilePictureUrl" loading="lazy" />
+            </div>
+        }
+
+        <div class="message-content">
+            @if (item is TextMessageDTO)
+            {
+                var textMessage = (TextMessageDTO)item;
+                <partial name="_TextMessagePartial" model="textMessage" />
+            }
+            else if (item is ImageMessageDTO)
+            {
+                var imageMessage = (ImageMessageDTO)item;
+                <partial name="_ImageMessagePartial" model="imageMessage" />
+            }
+
+            <span class="message-time">@item.TimeOfSending.ToString("HH:mm")</span>
+        </div>
+
+        @if (!isCurrentUser && showProfilePicture)
+        {
+            <div class="pfp pfp-small">
+                <img src="~/uploads/@item.SenderUser.ProfilePictureUrl" loading="lazy" />
+            </div>
+        }
+    </div>
+}
