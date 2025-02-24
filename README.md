@@ -1,1 +1,1 @@
-# Loquit
+# Loquit-Project
