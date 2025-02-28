@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Loquit.Services.DTOs;
 using Loquit.Services.Services.Abstractions;
+using System.Data;
 
 namespace Loquit.Web.Controllers
 {
@@ -22,14 +23,16 @@ namespace Loquit.Web.Controllers
         private readonly IPostService _postService;
         private readonly ICommentService _commentService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUserService _userService;
         private readonly IWebHostEnvironment _environment;
 
-        public PostsController(IPostService postService, IWebHostEnvironment environment, ICommentService commentService, UserManager<AppUser> userManager)
+        public PostsController(IPostService postService, IWebHostEnvironment environment, ICommentService commentService, UserManager<AppUser> userManager, IUserService userService)
         {
             _postService = postService;
             _commentService = commentService;
             _environment = environment;
             _userManager = userManager;
+            _userService = userService;
         }
 
         // GET: Posts
@@ -87,8 +90,12 @@ namespace Loquit.Web.Controllers
             if (await _userManager.GetUserAsync(User) != null)
             {
                 var currentUser = await _userManager.GetUserAsync(User);
-                currentUser.RecentlyOpenedPostsIds[currentUser.PostsRead % 50] = post.Id;
-                currentUser.PostsRead++;
+                if (!currentUser.RecentlyOpenedPostsIds.Contains(post.Id))
+                {
+                    await _userService.UpdatePreferences(currentUser, post.Category, post.Evaluations);
+                    currentUser.RecentlyOpenedPostsIds[currentUser.PostsRead % 50] = post.Id;
+                    currentUser.PostsRead++;
+                }
                 await _userManager.UpdateAsync(currentUser);
             }
             return View(post);
@@ -121,6 +128,7 @@ namespace Loquit.Web.Controllers
                     post.PictureUrl = newFileName;
                 }
                 post.TimeOfPosting = DateTime.Now;
+                post.Evaluations = _postService.Evaluate(post);
                 await _postService.AddPostAsync(post);
                 var currentUser = await _userManager.FindByIdAsync(post.CreatorId);
                 currentUser.PostsWritten++;
@@ -163,7 +171,7 @@ namespace Loquit.Web.Controllers
             {
                 return NotFound();
             }
-
+            //DateTime dt = _postService.GetTimeOfPostingAsync(id).Result;
             if (ModelState.IsValid)
             {
                 if (post.Picture != null && post.Picture.Length > 0)
@@ -172,6 +180,9 @@ namespace Loquit.Web.Controllers
                     post.PictureUrl = newFileName;
                 }
                 post.IsEdited = true;
+                post.Evaluations = _postService.Evaluate(post);
+                //post.TimeOfPosting = dt;
+                post.TimeOfPosting = DateTime.Now;
                 try
                 {
                     await _postService.UpdatePostAsync(post);

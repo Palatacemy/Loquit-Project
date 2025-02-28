@@ -111,10 +111,73 @@ namespace Loquit.Services.Services
             return "success";
         }
 
+        public async Task<IdentityResult> UpdatePreferences(AppUser user, string category, double[] evaluations)
+        {
+
+            if (TransformToNumber(category) != 0)
+            {
+                for (int i = 1; i <= 8; i++)
+                {
+                    if (i != TransformToNumber(category))
+                    {
+                        if (user.CategoryPreferences[i] >= 0.02 && user.CategoryPreferences[TransformToNumber(category)] <= 0.98)
+                        {
+                            user.CategoryPreferences[i] = Math.Round((user.CategoryPreferences[i] - 0.02), 2);
+                            user.CategoryPreferences[TransformToNumber(category)] = Math.Round((user.CategoryPreferences[TransformToNumber(category)] + 0.02), 2);
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                user.EvaluationPreferences[i] = Math.Round((user.EvaluationPreferences[i] * 49 + evaluations[i]) / 50, 2 );
+            }
+            return await _userManager.UpdateAsync(user);
+        }
+
         public async Task<ChatParticipantUserDTO?> GetChatParticipantUserDTOByIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             return user != null ? _mapper.Map<ChatParticipantUserDTO>(user) : null;
+        }
+
+
+
+        private int TransformToNumber(string input)
+        {
+            switch (input)
+            {
+                case "Food":
+                    return 1;
+                case "Music/Art":
+                    return 2;
+                case "Nature":
+                    return 3;
+                case "Pets":
+                    return 4;
+                case "Videogames":
+                    return 5;
+                case "Culture":
+                    return 6;
+                case "Funny":
+                    return 7;
+                case "Factology":
+                    return 8;
+                default:
+                    return 0;
+            }
+        }
+        public async Task<ChatParticipantUserDTO> UpdateChatParticipantUserAsync(ChatParticipantUserDTO userDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userDTO.Id);
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            user.MessagesWritten = userDTO.MessagesWritten;
+            await _userManager.UpdateAsync(user);
+            return _mapper.Map<ChatParticipantUserDTO>(user);
         }
     }
 }

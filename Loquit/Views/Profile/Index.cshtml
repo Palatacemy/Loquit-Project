@@ -19,10 +19,13 @@
             <span class="profile-name">@Model.UserName</span>
         </div>
         <ul class="qualities">
-            <li><div class="quality">Name:         </div>@Model.FirstName @Model.LastName</li>
+            <li><div class="quality">Name:         </div>@Model.FirstName @Model.LastName</li>  
             <li><div class="quality">E-Mail:       </div>@Model.Email</li>
             <li><div class="quality">Date of Birth:</div>@Model.DateOfBirth</li>
-            <li><div class="quality">About me:     </div>@Model.Description</li>
+            <li><div class="quality">About me:  </div>@Model.Description</li>
+            <li><div class="quality">Posts read:  </div>@Model.PostsRead</li>
+            <li><div class="quality">Posts created:  </div>@Model.PostsWritten</li>
+            <li><div class="quality">Comments written:  </div>@Model.CommentsWritten</li>
         </ul>
         <div id="partialViewContainer" style="display:flex; justify-content: center">
             @await Html.PartialAsync("PartialViewProfile", Model)

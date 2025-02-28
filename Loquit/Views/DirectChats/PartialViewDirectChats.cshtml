@@ -11,7 +11,7 @@
     var currentUser = await UserManager.GetUserAsync(User);
 }
 
-@foreach (var item in Model)
+@foreach (var item in Model.Reverse())
 {
     //var user = item.Members.Where(a => a.UserId != currentUser.Id).ToList()[0];
     var userChatMember = item.Members.FirstOrDefault(a => a.UserId != currentUser.Id);

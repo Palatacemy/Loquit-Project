@@ -17,7 +17,7 @@ namespace LoquitMVC.Tests
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-               // .UseInMemoryDatabase(databaseName: "TestDb")
+                .UseInMemoryDatabase(databaseName: "TestDb")
                 .Options;
 
             _context = new ApplicationDbContext(options);

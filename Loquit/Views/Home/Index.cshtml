@@ -9,6 +9,7 @@
 
 @{
     var currentUser = await UserManager.GetUserAsync(User);
+
 }
 
 <div class="main-container d-flex justify-content-center">
@@ -26,6 +27,7 @@
                                     <span class="pfp pfp-small"><img src="~/uploads/@creator.ProfilePictureUrl" loading="lazy" /></span>
                                     <span class="post-name">@creator.UserName</span>
                                 </a>
+                                <span class="post-category">@item.Category</span>
                                 <div class="post-header-options d-flex justify-content-between flex-row gap-2">
                                     @if(currentUser != null)
                                     {

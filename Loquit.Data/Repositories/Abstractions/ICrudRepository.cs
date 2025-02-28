@@ -14,6 +14,7 @@ namespace Loquit.Data.Repositories.Abstractions
     {
         public Task AddAsync(T entity);
         public Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate);
+        public IEnumerable<T> GetSync(Expression<Func<T, bool>> predicate);
         public Task<IEnumerable<T>> GetAllAsync();
         public Task<T> GetByIdAsync(int id);
         public Task UpdateAsync(T entity);

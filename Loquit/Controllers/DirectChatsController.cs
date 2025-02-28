@@ -19,6 +19,7 @@ using Loquit.Services.DTOs;
 using Loquit.Web.Models;
 using Loquit.Services.Services.Abstractions;
 using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
+using System.Runtime.InteropServices;
 
 namespace Loquit.Web.Controllers
 {
@@ -50,52 +51,56 @@ namespace Loquit.Web.Controllers
 
             var currentUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(currentUser.Id);
 
+            if (!directChatDTOs.Any())
+            {
+                var noChatsModel = new DirectChatViewModel
+                {
+                    ChatsList = new ChatsListViewModel 
+                    { 
+                        DirectChats = directChatDTOs 
+                    },
+                    CurrentChat = null
+                };
+                return View(noChatsModel);
+            }
+
             var firstChatDTO = directChatDTOs.First();
-
-            var messageDTOs = directChatDTOs.Any()
-                ? await _directChatService.GetMessagesForChatAsync(firstChatDTO.Id)
-                : new List<BaseMessageDTO>();
-
-            var chatListModel = new ChatsListViewModel()
-            {
-                DirectChats = directChatDTOs
-            };
-
-            var currentChatModel = new CurrentChatViewModel()
-            {
-                CurrentChat = firstChatDTO,
-                Messages = messageDTOs,
-                CurrentUser = currentUserDTO
-            };
 
             var model = new DirectChatViewModel
             {
-                ChatsList = chatListModel,
-                CurrentChat = currentChatModel
+                ChatsList = new ChatsListViewModel()
+                {
+                    DirectChats = directChatDTOs
+                },
+                CurrentChat = new CurrentChatViewModel()
+                {
+                    CurrentChat = firstChatDTO,
+                    CurrentUser = currentUserDTO
+                }
             };
 
-            return View("Index", model);
+            return View(model);
         }
 
-        [Route("/DirectChats")]
+        [HttpPost]
         public async Task<IActionResult> CreateChat(string id)
         {
             var currentUserId = _userManager.GetUserId(User);
             if (currentUserId == null)
             {
-                return NotFound("Current user Id not found.");
+                return NotFound("Current user not found.");
             }
 
             var currentUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(currentUserId);
             if (currentUserDTO == null)
             {
-                return NotFound("Current user not found.");
+                return NotFound("Current user DTO not found.");
             }
 
             var otherUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(id);
             if (otherUserDTO == null)
             {
-                return NotFound("Other user not found.");
+                return NotFound("Other user DTO not found.");
             }
 
             /*if (!currentUserDTO.Friends.Contains(otherUserDTO))
@@ -103,49 +108,61 @@ namespace Loquit.Web.Controllers
                 return NotFound();
             }*/
 
-            if (currentUserDTO.Chats.Any(chat => chat.UserId == otherUserDTO.Id))
+            if (currentUserDTO.Chats.Any(chat => chat.Chat.Members.Any(member => member.UserId == otherUserDTO.Id)))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "DirectChats");
             }
+
             var directChatDTO = new DirectChatDTO()
             {
                 Members = new List<ChatUserDTO>
                 {
-                    new ChatUserDTO { UserId = currentUserDTO.Id},
-                    new ChatUserDTO { UserId = otherUserDTO.Id}
+                    new ChatUserDTO { UserId = currentUserDTO.Id, TimeOfJoining = DateTime.Now },
+                    new ChatUserDTO { UserId = otherUserDTO.Id, TimeOfJoining = DateTime.Now }
                 }, 
                 Messages = new List<BaseMessageDTO>()
             };
             await _directChatService.AddDirectChatAsync(directChatDTO);
 
-            var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserDTO.Id);
-            var messageDTOs = directChatDTOs.Any()
-                ? await _directChatService.GetMessagesForChatAsync(directChatDTOs.First().Id)
-                : new List<BaseMessageDTO>();
+            var currentChatDTO = (await _directChatService.GetDirectChatsAsync()).Last();
 
-            var chatListModel = new ChatsListViewModel()
-            {
-                DirectChats = directChatDTOs
-            };
-
-            var currentChatModel = new CurrentChatViewModel()
-            {
-                CurrentChat = directChatDTO,
-                Messages = messageDTOs,
-                CurrentUser = currentUserDTO
-            };
+            /*var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserDTO.Id);
 
             var model = new DirectChatViewModel
             {
-                ChatsList = chatListModel,
-                CurrentChat = currentChatModel
+                ChatsList = new ChatsListViewModel()
+                {
+                    DirectChats = directChatDTOs
+                },
+                CurrentChat = new CurrentChatViewModel()
+                {
+                    CurrentChat = directChatDTO,
+                    CurrentUser = currentUserDTO
+                }
+            };
+
+            return View("Index", model);*/
+            
+
+            var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserId);
+
+            var model = new DirectChatViewModel
+            {
+                ChatsList = new ChatsListViewModel()
+                {
+                    DirectChats = directChatDTOs
+                },
+                CurrentChat = new CurrentChatViewModel()
+                {
+                    CurrentChat = currentChatDTO,
+                    CurrentUser = currentUserDTO
+                }
             };
 
             return View("Index", model);
         }
 
         [HttpPost]
-        [Route("/DirectChats")]
         public async Task<IActionResult> SendMessage([FromForm] SendMessageViewModel model)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -154,7 +171,13 @@ namespace Loquit.Web.Controllers
                 return NotFound("Current user not found.");
             }
 
-            var directChatDTO = await _directChatService.GetDirectChatByIdAsync(model.ChatId);
+            var currentUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(currentUser.Id);
+            if (currentUserDTO == null)
+            {
+                return NotFound("Current user DTO not found.");
+            }
+
+            var directChatDTO = await _directChatService.GetDirectChatWithMessagesAsync(model.ChatId);
             if (directChatDTO == null)
             {
                 return NotFound("Chat not found.");
@@ -167,7 +190,7 @@ namespace Loquit.Web.Controllers
                 case "text":
                     messageDTO = new TextMessageDTO
                     {
-                        SenderUserId = currentUser.Id,
+                        SenderUserId = currentUserDTO.Id,
                         Text = model.Text,
                         ChatId = model.ChatId
                     };
@@ -176,7 +199,7 @@ namespace Loquit.Web.Controllers
                     var fileName = await FileUpload.UploadAsync(model.ImageFile, _environment.WebRootPath);
                     messageDTO = new ImageMessageDTO
                     {
-                        SenderUserId = currentUser.Id,
+                        SenderUserId = currentUserDTO.Id,
                         PictureUrl = fileName,
                         ChatId = model.ChatId
                     };
@@ -188,24 +211,29 @@ namespace Loquit.Web.Controllers
             try
             {
                 await _directChatService.AddMessageToChatAsync(directChatDTO, messageDTO);
+                
+                
+                currentUserDTO.MessagesWritten++;
+                await _userService.UpdateChatParticipantUserAsync(currentUserDTO);
 
-                currentUser.MessagesWritten++;
-                await _userManager.UpdateAsync(currentUser);
-
-                var currentChatModel = new CurrentChatViewModel
+                if (messageDTO is TextMessageDTO textMessage)
                 {
-                    CurrentChat = directChatDTO,
-                    Messages = directChatDTO.Messages,
-                    CurrentUser = await _userService.GetChatParticipantUserDTOByIdAsync(currentUser.Id)
-                };
+                    return PartialView("_TextMessagePartial", textMessage);
+                }
+                else if (messageDTO is ImageMessageDTO imageMessage)
+                {
+                    return PartialView("_ImageMessagePartial", imageMessage);
+                }
 
-                return PartialView("_DirectChatMessagesPartial", currentChatModel);
+                return BadRequest("Invalid message type.");
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, error = ex.Message });
             }
         }
+
+        
 
         public async Task<IActionResult> LoadMessages(int chatId, int lastMessageId)
         {

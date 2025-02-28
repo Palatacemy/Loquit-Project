@@ -65,6 +65,14 @@ namespace Loquit.Services.Services
             return _mapper.Map<List<PostDTO>>(posts);
         }
 
+        public double[] Evaluate(PostDTO model)
+        {
+            var post = _mapper
+                .Map<Post>(model);
+            double[] evals = _postRepository.Evaluate(post);
+            return evals;
+        }
+
         public async Task<string> LikePost(int postId, string userId)
         {
             var hasLike = await _likeRepository.GetAsync(item => item.PostId == postId && item.UserId == userId);
@@ -126,13 +134,18 @@ namespace Loquit.Services.Services
 
                 return "removed";
             }
-
         }
 
         public async Task UpdatePostAsync(PostDTO model)
         {
             var post = _mapper.Map<Post>(model);
             await _postRepository.UpdateAsync(post);
+        }
+
+        public async Task<DateTime> GetTimeOfPostingAsync(int id)
+        {
+            var post = await _postRepository.GetByIdAsync(id);
+            return post.TimeOfPosting;
         }
     }
 }

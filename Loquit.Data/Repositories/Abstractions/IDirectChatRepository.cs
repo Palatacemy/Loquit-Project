@@ -10,6 +10,7 @@ namespace Loquit.Data.Repositories.Abstractions
 {
     public interface IDirectChatRepository : ICrudRepository<DirectChat>
     {
+        Task<DirectChat?> GetDirectChatWithMessagesAsync(int chatId);
         Task<List<BaseMessage>> GetMessagesByChatIdAsync(int chatId);
         Task<List<BaseMessage>> GetMessagesBeforeIdAsync(int chatId, int lastMessageId, int count);
     }

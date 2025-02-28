@@ -14,7 +14,7 @@ namespace Loquit.Data.Entities
         {
             LikedBy = new HashSet<Like>();
             DislikedBy = new HashSet<Dislike>();
-            Replies = new HashSet<Comment>();
+            //Replies = new HashSet<Comment>();
             IsEdited = false;
             Likes = 0;
             Dislikes = 0;
@@ -30,8 +30,8 @@ namespace Loquit.Data.Entities
         public virtual ICollection<Dislike>? DislikedBy { get; set; }
         public virtual Post? Post { get; set; }
         public int PostId { get; set; }
-        public virtual Comment? Parent { get; set; }
+        /*public virtual Comment? Parent { get; set; }
         public int? ParentId { get; set; }
-        public virtual ICollection<Comment>? Replies { get; set; }
+        public virtual ICollection<Comment>? Replies { get; set; }*/
     }
 }

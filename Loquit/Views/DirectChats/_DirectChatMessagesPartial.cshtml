@@ -10,44 +10,56 @@
 
 @{
     string? previousSenderId = null;
+    int consecutiveMessageCount = 0;
+    DateTime lastMessageTime = DateTime.MinValue;
+    const int messageThreshold = 5;
 }
 
-@foreach (var item in Model.Messages)
+@foreach (var item in Model.CurrentChat.Messages)
 {
     bool isCurrentUser = (item.SenderUserId == Model.CurrentUser.Id);
-    var messageClass = isCurrentUser ? "message-container current-user" : "message-container other-user";
+    var messageClass = isCurrentUser ? "current-user" : "other-user";
 
-    bool showProfilePicture = (previousSenderId != item.SenderUserId);
+    bool showProfilePicture = false;
+    if (previousSenderId == item.SenderUserId)
+    {
+        consecutiveMessageCount++;
+
+        if (DateTime.Now - lastMessageTime <= TimeSpan.FromMinutes(10))
+        {
+            if (consecutiveMessageCount >= messageThreshold)
+            {
+                showProfilePicture = true;
+                consecutiveMessageCount = 0;
+            }
+        }
+    }
+    else
+    {
+        consecutiveMessageCount = 1;
+        showProfilePicture = true;
+    }
+    lastMessageTime = DateTime.Now;
     previousSenderId = item.SenderUserId;
 
-    <div class="@messageClass">
-        @if (!isCurrentUser && showProfilePicture)
-        {
-            <div class="pfp pfp-small">
+    <div class="message-container @messageClass d-flex">
+
+        <div class="pfp pfp-small @(!showProfilePicture ? ".hidden" : "") d-flex justify-content-start">
+            @if (showProfilePicture)
+            {
                 <img src="~/uploads/@item.SenderUser.ProfilePictureUrl" loading="lazy" />
-            </div>
-        }
-
-        <div class="message-content">
-            @if (item is TextMessageDTO)
-            {
-                var textMessage = (TextMessageDTO)item;
-                <partial name="_TextMessagePartial" model="textMessage" />
             }
-            else if (item is ImageMessageDTO)
-            {
-                var imageMessage = (ImageMessageDTO)item;
-                <partial name="_ImageMessagePartial" model="imageMessage" />
-            }
-
-            <span class="message-time">@item.TimeOfSending.ToString("HH:mm")</span>
         </div>
-
-        @if (!isCurrentUser && showProfilePicture)
+        
+        @if (item is TextMessageDTO)
         {
-            <div class="pfp pfp-small">
-                <img src="~/uploads/@item.SenderUser.ProfilePictureUrl" loading="lazy" />
-            </div>
+            var textMessage = (TextMessageDTO)item;
+            <partial name="_TextMessagePartial" model="textMessage" />
+        }
+        else if (item is ImageMessageDTO)
+        {
+            var imageMessage = (ImageMessageDTO)item;
+            <partial name="_ImageMessagePartial" model="imageMessage" />
         }
     </div>
 }

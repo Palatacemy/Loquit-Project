@@ -52,6 +52,11 @@ namespace Loquit.Data.Repositories
             return await _dbSet.Where(predicate)
                 .ToListAsync();
         }
+        public IEnumerable<T> GetSync(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.Where(predicate)
+                .ToList();
+        }
 
         public async Task<T> GetByIdAsync(int id)
         {

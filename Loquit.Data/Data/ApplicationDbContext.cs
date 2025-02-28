@@ -30,9 +30,10 @@ namespace Loquit.Data
         {
             base.OnModelCreating(builder);
 
-            /*builder.Entity<AppUser>()
+            builder.Entity<AppUser>()
                 .HasMany(u => u.Posts)
-                .WithOne(p => p.Creator);*/
+                .WithOne(p => p.Creator);
+
             builder.Entity<Post>()
                 .HasOne(p => p.Creator)
                 .WithMany(u => u.Posts)
@@ -44,11 +45,11 @@ namespace Loquit.Data
                 .HasForeignKey(c => c.CommenterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Comment>()
+            /*builder.Entity<Comment>()
                 .HasOne(m => m.Parent)
                 .WithMany(m => m.Replies)
                 .HasForeignKey(m => m.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);*/
 
             builder.Entity<ChatUser>()
                 .HasKey(cu => new { cu.ChatId, cu.UserId });

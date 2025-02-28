@@ -7,6 +7,6 @@ namespace Loquit.Web.Models
     public class DirectChatViewModel
     {
         public ChatsListViewModel ChatsList { get; set; }
-        public CurrentChatViewModel CurrentChat { get; set; }
+        public CurrentChatViewModel? CurrentChat { get; set; }
     }
 }

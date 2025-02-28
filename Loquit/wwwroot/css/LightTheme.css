@@ -7,6 +7,7 @@
     --logoC: #25000c;
     --pink: #f7deff;
     --text: #424242;
+    --other-user-text: #b5b5b5
 }
 
 ::-webkit-scrollbar {
@@ -113,12 +114,12 @@ label {
 }
 
 .post-header-info {
-/*    margin-bottom: 10px;*/
+    margin-bottom: 10px;
 }
 
 .pfp {
-    display:flex;
-    justify-content:center;
+    display: flex;
+    justify-content: center;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
@@ -138,6 +139,12 @@ label {
 .post-name {
     font-weight: bolder;
     color: var(--bg) !important;
+    margin: auto auto auto 10px;
+}
+
+.post-category {
+    font-weight: bolder;
+    color: var(--logoB) !important;
     margin: auto auto auto 10px;
 }
 
@@ -610,9 +617,10 @@ textarea.form-control {
 .messages {
     height: 70%;
     margin: 0 0 1rem;
+    padding: 1rem;
     background-color: var(--left);
     width: 90%;
-    border-radius: 1rem;
+    border-radius: 10px;
     border: 2px solid var(--logoA);
     overflow-y: scroll;
 }
@@ -620,14 +628,16 @@ textarea.form-control {
 .message-container {
     display: flex;
     align-items: center;
-    gap: 10px; 
-    max-width: 80%;
+    margin: 0 0 0.1rem 0;
+    gap: 10px;
+    max-width: 100%;
 }
 
 .message-content {
     padding: 10px;
     border-radius: 8px;
-    max-width: 100%;
+    max-width: 60%;
+    text-align: left;
 }
 
 .current-user {
@@ -638,7 +648,6 @@ textarea.form-control {
 .current-user .message-content {
     background-color: var(--logoB);
     color: white;
-    text-align: right;
 }
 
 .other-user {
@@ -647,9 +656,8 @@ textarea.form-control {
 }
 
 .other-user .message-content {
-    background-color: var(--left);
+    background-color: var(--other-user-text);
     color: black;
-    text-align: left;
 }
 
 .write-message {
@@ -657,23 +665,25 @@ textarea.form-control {
 }
 
 .message-text {
-    padding: 10px;
+    padding: 5px;
     word-wrap: break-word;
     white-space: normal;
 }
 
 .message-image {
     display: block;
-    max-height: 250px;
-    max-height: 250px;
     margin: 1%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 1rem;
     overflow: hidden;
 }
 
+.message-image img {
+    max-width: 100%;
+}
+
 .message-time {
-    position: absolute;
+    position: relative;
     bottom: 0;
     right: 0;
     font-size: 0.75rem;
@@ -681,6 +691,7 @@ textarea.form-control {
     padding-top: 5px;
     white-space: nowrap;
     margin-top: 5px;
+    text-align: right;
 }
 
 .write-message-container {
@@ -714,8 +725,8 @@ textarea.form-control {
 }
 
 .image-message-btn {
-    height: 70px;
-    width: 5rem;
+    height: 40px;
+    width: 140px;
     border-radius: 1rem !important;
     outline: none !important;
     box-shadow: none !important;
@@ -724,4 +735,21 @@ textarea.form-control {
     background-color: var(--right);
     color: var(--text);
     border: 1px var(--logoA) solid;
+}
+
+.image-message-container {
+    display: flex;
+    align-items: center;
+}
+
+.image-label {
+    border: 1px solid var(--logoB);
+    padding: 5px;
+    margin-right: 10px;
+    background-color: var(--left);
+    cursor: pointer;
+}
+
+.hidden {
+    visibility: hidden;
 }

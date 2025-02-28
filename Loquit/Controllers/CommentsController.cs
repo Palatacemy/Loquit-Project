@@ -98,9 +98,10 @@ namespace Loquit.Web.Controllers
             if (ModelState.IsValid)
             {
                 comment.TimeOfCommenting = DateTime.Now;
-                comment.Commenter = await _userManager.GetUserAsync(User);
                 await _commentService.AddCommentAsync(comment);
-                comment.Commenter.CommentsWritten++;
+                var currentUser = await _userManager.FindByIdAsync(comment.CommenterId);
+                currentUser.CommentsWritten++;
+                await _userManager.UpdateAsync(currentUser);
                 return RedirectToAction("Details", "Posts", new { id = comment.PostId });
             }
             return View(comment);

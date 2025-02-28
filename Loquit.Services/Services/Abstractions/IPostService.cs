@@ -16,7 +16,9 @@ namespace Loquit.Services.Services.Abstractions
         Task AddPostAsync(PostDTO post);
         Task DeletePostByIdAsync(int id);
         Task UpdatePostAsync(PostDTO post);
+        double[] Evaluate(PostDTO model);
         Task<string> LikePost(int id, string userId);
         Task<string> DislikePost(int id, string userId);
+        Task<DateTime> GetTimeOfPostingAsync(int id);
     }
 }

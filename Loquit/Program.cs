@@ -29,8 +29,8 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>));
-builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddScoped(typeof(ICrudRepository<>), typeof(CrudRepository<>));
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddTransient<IDirectChatRepository, DirectChatRepository>();
 builder.Services.AddTransient<IGroupChatRepository, GroupChatRepository>();
 builder.Services.AddTransient<IChatUserRepository, ChatUserRepository>();
@@ -39,7 +39,7 @@ builder.Services.AddTransient<IGroupChatService, GroupChatService>();
 builder.Services.AddTransient<IImageMessageService, ImageMessageService>();
 builder.Services.AddTransient<ITextMessageService, TextMessageService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
-builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -51,7 +51,7 @@ using (var scope = app.Services.CreateScope())
     RoleSeeder.Initialize(services).Wait();
     AdminSeeder.Initialize(services).Wait();
     // TestProfilesSeeder.Initialize(services, 5).Wait();
-    AlgorhytmTestSeeder.Initialize(services, false).Wait();
+    AlgorithmTestSeeder.Initialize(services, false).Wait();
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

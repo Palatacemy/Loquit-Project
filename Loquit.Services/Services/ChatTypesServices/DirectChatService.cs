@@ -50,6 +50,8 @@ namespace Loquit.Services.Services.ChatTypesServices
                 };
 
                 await _chatUserRepository.AddUserToChatAsync(chatUser);
+
+                _mapper.Map<ChatUserDTO>(chatUser);
             }
         }
 
@@ -93,7 +95,7 @@ namespace Loquit.Services.Services.ChatTypesServices
         {
             var directChat = await _directChatRepository.GetByIdAsync(directChatDTO.Id);
 
-            var messageEntity = MapMessageDTOToEntity(messageDTO);
+            var messageEntity = MapMessageDTOToEntity(messageDTO, directChat.Id);
             switch (messageEntity)
             {
                 case TextMessage textMessage:
@@ -112,6 +114,12 @@ namespace Loquit.Services.Services.ChatTypesServices
             
         }
 
+        public async Task<DirectChatDTO?> GetDirectChatWithMessagesAsync(int chatId)
+        {
+            var directChat = await _directChatRepository.GetDirectChatWithMessagesAsync(chatId);
+            return _mapper.Map<DirectChatDTO>(directChat);
+        }
+
         public async Task<List<BaseMessageDTO>> GetMessagesForChatAsync(int chatId)
         {
             var messages = await _directChatRepository.GetMessagesByChatIdAsync(chatId);
@@ -124,7 +132,7 @@ namespace Loquit.Services.Services.ChatTypesServices
             return _mapper.Map<List<BaseMessageDTO>>(messages); // Maps to DTOs
         }
 
-        private BaseMessage MapMessageDTOToEntity(BaseMessageDTO messageDTO)
+        private BaseMessage MapMessageDTOToEntity(BaseMessageDTO messageDTO, int chatId)
         {
             switch (messageDTO)
             {
@@ -133,7 +141,8 @@ namespace Loquit.Services.Services.ChatTypesServices
                     {
                         SenderUserId = textMessageDTO.SenderUserId,
                         Text = textMessageDTO.Text,
-                        TimeOfSending = DateTime.Now
+                        TimeOfSending = DateTime.Now,
+                        ChatId = chatId
                     };
 
                 case ImageMessageDTO imageMessageDTO:
@@ -141,7 +150,8 @@ namespace Loquit.Services.Services.ChatTypesServices
                     {
                         SenderUserId = imageMessageDTO.SenderUserId,
                         PictureUrl = imageMessageDTO.PictureUrl,
-                        TimeOfSending = DateTime.Now
+                        TimeOfSending = DateTime.Now,
+                        ChatId = chatId
                     };
 
                 default:

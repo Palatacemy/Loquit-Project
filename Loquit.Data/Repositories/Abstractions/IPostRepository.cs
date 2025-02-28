@@ -10,5 +10,6 @@ namespace Loquit.Data.Repositories.Abstractions
     public interface IPostRepository : ICrudRepository<Post>
     {
         Task<List<Post>> GetPostsByAlgorithmAsync(bool AllowNsfw, double[] categoryPreferences, double[] evaluationPreference, int[] recentlyOpenedPostsIds);
+        public double[] Evaluate(Post post);
     }
 }

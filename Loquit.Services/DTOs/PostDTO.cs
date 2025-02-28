@@ -13,7 +13,7 @@ namespace Loquit.Services.DTOs
         public PostDTO()
         {
             Evaluations = [0, 0, 0, 0, 0];
-            CategoryId = 0;
+            Category = "";
             IsEdited = false;
             IsNsfw = false;
             IsSpoiler = false;
@@ -34,7 +34,7 @@ namespace Loquit.Services.DTOs
         public virtual List<Like>? LikedBy { get; set; }
         public virtual List<Save>? SavedBy { get; set; }
         public virtual List<Dislike>? DislikedBy { get; set; }
-        public int CategoryId { get; set; }
+        public string Category { get; set; }
         public double[] Evaluations { get; set; }
         public bool IsSpoiler { get; set; }
         public bool IsNsfw { get; set; }

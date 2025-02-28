@@ -17,7 +17,7 @@ namespace Loquit.Data.Entities
             Chats = new HashSet<ChatUser>();
             SentMessages = new HashSet<BaseMessage>();
             Posts = new HashSet<Post>();
-            //Comments = new HashSet<Comment>();
+            Comments = new HashSet<Comment>();
             SavedPosts = new HashSet<Save>();
             LikedPosts = new HashSet<Like>();
             DislikedPosts = new HashSet<Dislike>();
