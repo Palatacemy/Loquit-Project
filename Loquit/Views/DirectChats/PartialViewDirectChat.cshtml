@@ -5,12 +5,12 @@
 @model CurrentChatViewModel;
 
 @if (Model != null) {
-    <div class="messages" id="chatMessages">
+    <div class="messages">
         <partial name="_DirectChatMessagesPartial" model="Model" />
     </div>
     <div style="height: 20%">
         <partial name="_TextMessageFormPartial" model="new SendMessageViewModel() { ChatId = Model.CurrentChat.Id }" />
-        <partial name="_ImageMessageFormPartial" model="new SendMessageViewModel() { ChatId = Model.CurrentChat.Id }" />
+        <partial name="_ImageMessageFormPartial" model="new SendMessageViewModel()" />
     </div>
 }
 else {

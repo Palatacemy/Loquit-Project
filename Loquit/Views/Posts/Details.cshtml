@@ -18,15 +18,17 @@
             @{
                 var creator = await UserManager.FindByIdAsync(Model.CreatorId);
             }
-            <div class="post-header2 d-flex justify-content-between flex-row">
-                <div class="post-header-text">
-                    <div class="post-header-info d-flex flex-row justify-content-between">
-                        <a asp-route-username="@creator.UserName" asp-controller="Profile" asp-action="Index" class="post-user d-flex flex-row">
-                            <span class="pfp pfp-small"><img src="~/uploads/@creator.ProfilePictureUrl" loading="lazy" /></span>
-                            <span class="post-name">@creator.UserName</span>
-                        </a>
-                        <span class="post-category">@Model.Category</span>
-                        <div class="post-header-options d-flex justify-content-between flex-row gap-2">
+
+                
+                    <div class="post-header2 d-flex justify-content-between flex-row">
+                        <div class="post-header-text">
+                            <div class="post-header-info d-flex flex-row justify-content-between">
+                                <a asp-route-username="@creator.UserName" asp-controller="Profile" asp-action="Index" class="post-user d-flex flex-row">
+                                    <span class="pfp pfp-small"><img src="~/uploads/@creator.ProfilePictureUrl" loading="lazy" /></span>
+                                    <span class="post-name">@creator.UserName</span>
+                                </a>
+                    <span class="post-category">@Model.Category</span>
+                                <div class="post-header-options d-flex justify-content-between flex-row gap-2">
                         @if (currentUser != null)
                         {
                             <a href="javascript:void(0);" onclick="likePost(@Model.Id, this)" class="post-header-option">
@@ -49,32 +51,32 @@
                                 <div>@Model.DislikedBy.Count</div>
                             </a>
                         }
-                        <div class="post-header-option">
-                            <img class="option comment" src="~/img/Comment.png" loading="lazy" />
-                        <div>@Model.Comments.Count</div>
-                        </div>
-                        <div class="post-header-more">
-                            <div class="dropdown">
-                                <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="more" src="~/img/more.png" loading="lazy" />
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    @if (currentUser != null && currentUser.Id == creator.Id)
-                                    {
-                                    <li><a asp-action="Delete" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Delete</a></li>
-                                    <li><a asp-action="Edit" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Edit</a></li>
-                                    }
-                                    <li><a class="dropdown-item" href="#">Save</a></li>
-                                    <li><a class="dropdown-item" href="#">Report</a></li>
-                                    <li><a class="dropdown-item" href="#">Block User</a></li>
-                                </ul>
+                                    <div class="post-header-option">
+                                        <img class="option comment" src="~/img/Comment.png" loading="lazy" />
+                                    <div>@Model.Comments.Count</div>
+                                    </div>
+                                    <div class="post-header-more">
+                                        <div class="dropdown">
+                                            <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img class="more" src="~/img/more.png" loading="lazy" />
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                @if (currentUser != null && currentUser.Id == creator.Id)
+                                                {
+                                                <li><a asp-action="Delete" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Delete</a></li>
+                                                <li><a asp-action="Edit" asp-controller="Posts" asp-route-id="@Model.Id" class="dropdown-item">Edit</a></li>
+                                                }
+                                                <li><a class="dropdown-item" href="#">Save</a></li>
+                                                <li><a class="dropdown-item" href="#">Report</a></li>
+                                                <li><a class="dropdown-item" href="#">Block User</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="title">
-                    @Model.Title
-                </div>
+                            <div class="title">
+                                @Model.Title
+                            </div>
                 <div class="warnings">
                     @if (Model.IsSpoiler)
                     {
@@ -93,17 +95,19 @@
                         @Model.TimeOfPosting.ToString("HH:mm:ss dd.M.yyyy")
                     </div>
                 </div>
-            </div>
-        </div>
-        <div>
+                        </div>
+                    </div>
+                     <div>
             @if (Model.PictureUrl != null)
             {
                 <img class="post-image2" src="~/uploads/@Model.PictureUrl" loading="lazy" />
-            }        
-        </div>
+            }
+                        
+                    </div>
         <div class="body-text">
             @Model.BodyText
         </div>
+            
     </div>
     </div>
     @if (currentUser != null)
@@ -161,6 +165,7 @@
                                         <li><a asp-action="Delete" asp-controller="Comments" asp-route-id="@item.Id" class="dropdown-item">Delete</a></li>
                                     </ul>
                                 }
+                                
                             </div>
                         </div>
                     </div>

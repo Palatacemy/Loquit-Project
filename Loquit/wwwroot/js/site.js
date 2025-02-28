@@ -291,84 +291,25 @@ $(document).ready(function () {
     });
 });*/
 
-function sendMessage(event, formData) {
-    event.preventDefault();
-    console.log("Sending message...")
-    $.ajax({
-        url: "/DirectChats/SendMessage",
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log("Success:", response);
-                $('#chatMessages').append(response);
+/*function getCategoryName(categoryId) {
 
-                const lastMessage = $('#chatMessages').children().last();
-                lastMessage.addClass('message-container current-user d-flex')
-                .children();
-                lastMessage.find('img').addClass('pfp-small');
-        },
-        error: function (xhr, status, error) {
-            console.error("Error:", error);
-            alert('Error: ' + error);
-        }
-    });
-}
+    let categoryName = "";
 
-function sendTextMessage(event) {
-    event.preventDefault();
-    console.log("Text message button clicked!");
-    const form = event.target;
-    const formData = new FormData(form);
-
-    const textArea = form.querySelector('textarea[name="Text"]');
-    if (textArea.value.trim() === '') {
-        alert('Please enter a message.');
-        return;
+    switch (categoryId) {
+        case 0: categoryName = ""; break;
+        case 1: categoryName = "Food"; break;
+        case 2: categoryName = "Music/Art"; break;
+        case 3: categoryName = "Nature"; break;
+        case 4: categoryName = "Pets"; break;
+        case 5: categoryName = "Videogames"; break;
+        case 6: categoryName = "Culture"; break;
+        case 7: categoryName = "Funny"; break;
+        case 8: categoryName = "Factology"; break;
+        default: console.log("Category does not exist");
     }
 
-    sendMessage(event, formData);
-
-    textArea.value = '';
-    textArea.dispatchEvent(new Event('input'));
-}
-
-function sendImageMessage(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    const imageFileInput = form.querySelector('input[type="file"]');
-    if (!imageFileInput.files.length) {
-        alert('Please select an image to send.');
-        return;
-    }
-
-    sendMessage(event, formData);
-
-    form.reset();
-}
-
-function previewImage(event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('imagePreview');
-    const sendButton = document.getElementById('sendImageButton');
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            sendButton.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    } else {
-        preview.style.display = 'none';
-        sendButton.style.display = 'none';
-    }
-}
+    return categoryName;
+}*/
 
 function updateUrl(inputElement = "") {
     const username = inputElement.value;
