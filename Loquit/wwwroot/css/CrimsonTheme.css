@@ -617,7 +617,7 @@ textarea {
 /* ------ Chats ------ */
 
 .messages {
-    height: 60rem;
+    height: 38rem;
     margin: 0 0 1rem;
     padding: 1rem;
     background-color: var(--left);
