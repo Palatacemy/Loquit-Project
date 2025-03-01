@@ -1,11 +1,22 @@
-﻿using Loquit.Data.Entities;
-
-namespace Loquit.Utils
+﻿namespace Loquit.Utils
 {
     public static class FileUpload
     {
+        private static readonly string[] ValidImageMimeTypes = { "image/jpeg", "image/png", "image/gif" };
+        private static readonly long MaxFileSize = 10 * 1024 * 1024;
+
         public static async Task<string> UploadAsync(IFormFile picture, string root)
         {
+            if (picture.Length > MaxFileSize)
+            {
+                throw new InvalidOperationException("File size exceeds the maximum limit.");
+            }
+
+            if (!IsValidImageType(picture))
+            {
+                throw new InvalidOperationException("Invalid file type. Only images are allowed.");
+            }
+
             var extension = Path.GetExtension(picture.FileName);
             var name = Guid.NewGuid().ToString();
             var newFileName = $"{name}{extension}";
@@ -15,6 +26,12 @@ namespace Loquit.Utils
                 await picture.CopyToAsync(stream);
             }
             return newFileName;
+        }
+
+        private static bool IsValidImageType(IFormFile file)
+        {
+            var mimeType = file.ContentType.ToLower();
+            return ValidImageMimeTypes.Contains(mimeType);
         }
     }
 }

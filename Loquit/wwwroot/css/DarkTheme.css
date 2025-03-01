@@ -7,6 +7,7 @@
     --logoC: #25000c;
     --pink: #f7deff;
     --text: #dddddd;
+    --other-user-text: #606060;
 }
 
 ::-webkit-scrollbar {
@@ -30,7 +31,6 @@ body {
     background-attachment: fixed;
     background-size: cover;
     position: relative;
-    min-height: 87vh;
 }
 
 
@@ -142,12 +142,19 @@ label {
     margin: auto auto auto 10px;
 }
 
+.post-category {
+    font-weight: bolder;
+    color: var(--logoA) !important;
+    margin: auto auto auto 10px;
+}
+
 .post-header-text {
     font-size: 1rem;
     font-weight: 400;
     width: 100%;
     margin: auto 0;
     color: var(--text);
+    word-wrap: break-word;
 }
 
 .post-header-options {
@@ -304,11 +311,10 @@ button.show {
 
 /* ------ left container friends ------ */
 
-
 .friend-header-option {
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    margin-left: 10px;
     text-align: center;
     font-size: 1rem;
     font-weight: bold;
@@ -317,11 +323,28 @@ button.show {
     filter: brightness(0) saturate(100%) invert(50%) sepia(1%) saturate(0%) brightness(98%) contrast(98%);
 }
 
+.friend-header-more {
+    margin-left: 20px;
+    align-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--bg);
+    height: 40px;
+}
+
 .friend-user {
     margin-right: auto
 }
 
-/* ------ right container ------ */
+/* ------ right container friends ------ */
+
+.friend-request {
+    width: 98%;
+    margin: 0 1% 1%;
+    padding: 12px;
+}
+
+/* ------ right container posts ------ */
 
 .right-container {
     width: 25%;
@@ -542,6 +565,7 @@ textarea {
 .body-text {
     margin-bottom: 1%;
     color: var(--text);
+    word-wrap: break-word;
 }
 
 /* ------ Profile ------ */
@@ -590,3 +614,143 @@ textarea {
     margin-right: 20px;
 }
 
+/* ------ Chats ------ */
+
+.messages {
+    height: 60rem;
+    margin: 0 0 1rem;
+    padding: 1rem;
+    background-color: var(--left);
+    width: 90%;
+    border-radius: 10px;
+    border: 2px solid var(--logoA);
+    overflow-y: scroll;
+}
+
+.message-container {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0.1rem 0;
+    gap: 10px;
+    max-width: 100%;
+}
+
+.message-content {
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 60%;
+    text-align: left;
+}
+
+.current-user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+    .current-user .message-content {
+        background-color: var(--logoA);
+        color: white;
+    }
+
+.other-user {
+    align-self: flex-start;
+    flex-direction: row;
+}
+
+    .other-user .message-content {
+        background-color: var(--other-user-text);
+        color: white;
+    }
+
+.write-message {
+    margin: 1rem;
+}
+
+.message-text {
+    padding: 5px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.message-image {
+    display: block;
+    margin: 1%;
+    object-fit: contain;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+    .message-image img {
+        max-width: 100%;
+    }
+
+.message-time {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: 3px;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.write-message-container {
+    min-height: 60px;
+    max-height: 12rem;
+    width: 38rem;
+    padding: 10px;
+    border-radius: 1rem 0 0 1rem !important;
+    border: 1px var(--logoA) solid;
+    background-color: var(--left);
+    color: white;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+.write-message-btn {
+    height: 70px;
+    width: 5rem;
+    border-radius: 0 1rem 1rem 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--right);
+    color: var(--text);
+    border-top: 1px var(--logoA) solid;
+    border-bottom: 1px var(--logoA) solid;
+    border-right: 1px var(--logoA) solid;
+}
+
+    .write-message-btn > div {
+        margin: auto;
+    }
+
+.image-message-btn {
+    height: 40px;
+    width: 140px;
+    border-radius: 1rem !important;
+    outline: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    background-color: var(--right);
+    color: var(--text);
+    border: 1px var(--logoA) solid;
+}
+
+.image-message-container {
+    display: flex;
+    align-items: center;
+}
+
+.image-label {
+    border: 2px solid var(--logoA);
+    padding: 5px;
+    margin-right: 10px;
+    color: var(--text) !important;
+    background-color: var(--right) !important;
+    cursor: pointer;
+}
+
+.message-pfp-hidden {
+    visibility: hidden;
+}

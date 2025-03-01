@@ -91,9 +91,9 @@ namespace Loquit.Services.Services.ChatTypesServices
             return _mapper.Map<List<DirectChatDTO?>>(chatUsers.Select(cu => cu.Chat));
         }
 
-        public async Task<DirectChatDTO> AddMessageToChatAsync(DirectChatDTO directChatDTO, BaseMessageDTO messageDTO)
+        public async Task AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO)
         {
-            var directChat = await _directChatRepository.GetByIdAsync(directChatDTO.Id);
+            var directChat = await _directChatRepository.GetByIdAsync(chatId);
 
             var messageEntity = MapMessageDTOToEntity(messageDTO, directChat.Id);
             switch (messageEntity)
@@ -110,8 +110,11 @@ namespace Loquit.Services.Services.ChatTypesServices
 
             directChat.Messages.Add(messageEntity);
             await _directChatRepository.UpdateAsync(directChat);
-            return _mapper.Map<DirectChatDTO>(directChat);
-            
+        }
+
+        public async Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<DirectChatDTO?> GetDirectChatWithMessagesAsync(int chatId)

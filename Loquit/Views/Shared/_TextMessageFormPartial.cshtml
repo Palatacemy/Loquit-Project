@@ -6,7 +6,7 @@
     var chatId = Model.ChatId;
 }
 
-<form asp-controller="DirectChats" asp-action="SendMessage" method="post" class="write-message d-flex justify-content-center flex-row" onsubmit="return validateForm()">   
+<form asp-controller="DirectChats" asp-action="SendMessage" method="post" class="write-message d-flex justify-content-center flex-row" id="textMessageForm" onsubmit="sendTextMessage(event)">   
     <input type="hidden" asp-for="ChatId" value="@chatId" />
     <input type="hidden" asp-for="MessageType" value="text"/>
     <textarea asp-for="Text" oninput="auto_grow_messageContainer(this)" textmode="MultiLine" class="write-message-container" placeholder="Type a message..."></textarea>

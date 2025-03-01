@@ -7,6 +7,7 @@
     --logoC: #25000c;
     --pink: #f7deff;
     --text: #424242;
+    --other-user-text: #d7d7d7;
 }
 
 ::-webkit-scrollbar {
@@ -19,9 +20,9 @@
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--logoC);
-}
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--logoC);
+    }
 
 body {
     background-color: var(--left);
@@ -59,9 +60,9 @@ a {
     color: inherit;
 }
 
-a:hover {
-    color: var(--logoA);
-}
+    a:hover {
+        color: var(--logoA);
+    }
 
 label {
     color: var(--text);
@@ -104,7 +105,7 @@ label {
 
 .post-header {
     width: 98%;
-  margin: 1% 1% 0;
+    margin: 1% 1% 0;
 }
 
 .post-header2 {
@@ -117,8 +118,8 @@ label {
 }
 
 .pfp {
-    display:flex;
-    justify-content:center;
+    display: flex;
+    justify-content: center;
     position: relative;
     border-radius: 50%;
     overflow: hidden;
@@ -143,7 +144,7 @@ label {
 
 .post-category {
     font-weight: bolder;
-    color: var(--logoB) !important;
+    color: var(--logoA) !important;
     margin: auto auto auto 10px;
 }
 
@@ -153,6 +154,7 @@ label {
     width: 100%;
     margin: auto 0;
     color: var(--text);
+    word-wrap: break-word;
 }
 
 .post-header-options {
@@ -308,7 +310,6 @@ button.show {
 
 /* ------ left container friends ------ */
 
-
 .friend-header-option {
     display: flex;
     align-items: center;
@@ -320,6 +321,7 @@ button.show {
     height: 40px;
     filter: brightness(0) saturate(100%) invert(50%) sepia(1%) saturate(0%) brightness(98%) contrast(98%);
 }
+
 .friend-header-more {
     margin-left: 20px;
     align-content: center;
@@ -333,8 +335,6 @@ button.show {
     margin-right: auto
 }
 
-
-
 /* ------ right container friends ------ */
 
 .friend-request {
@@ -344,6 +344,7 @@ button.show {
 }
 
 /* ------ right container posts ------ */
+
 .right-container {
     width: 25%;
     background-color: var(--right);
@@ -419,18 +420,18 @@ button.show {
         flex-direction: column;
     }
 
-    .main-container > div:first-child {
-        order: 1;
-    }
+        .main-container > div:first-child {
+            order: 1;
+        }
 
     .left-container {
         width: 100%;
         background-color: var(--right);
     }
 
-    .left-container > div {
-        margin-top: 1rem;
-    }
+        .left-container > div {
+            margin-top: 1rem;
+        }
 
     .right-container {
         width: 100%;
@@ -451,9 +452,9 @@ button.show {
     overflow: hidden;
 }
 
-.form-container-content > .row {
-    margin: 0 2rem;
-}
+    .form-container-content > .row {
+        margin: 0 2rem;
+    }
 
 
 .form-title {
@@ -483,16 +484,16 @@ hr {
     box-shadow: none !important;
 }
 
-.form-check-input:checked {
-    border: none;
-    background-color: var(--logoA);
-    box-shadow: none !important;
-}
+    .form-check-input:checked {
+        border: none;
+        background-color: var(--logoA);
+        box-shadow: none !important;
+    }
 
-.form-check-input:active {
-    border-color: var(--logoA) !important;
-    box-shadow: none !important;
-}
+    .form-check-input:active {
+        border-color: var(--logoA) !important;
+        box-shadow: none !important;
+    }
 
 textarea {
     border-radius: 2rem !important;
@@ -500,9 +501,9 @@ textarea {
     overflow: hidden;
 }
 
-textarea.form-control {
-    min-height: 7rem;
-}
+    textarea.form-control {
+        min-height: 7rem;
+    }
 
 .title {
     font-size: 1.5rem;
@@ -546,9 +547,9 @@ textarea.form-control {
     border-right: 1px var(--logoA) solid;
 }
 
-.write-comment-btn > div {
-    margin: auto;
-}
+    .write-comment-btn > div {
+        margin: auto;
+    }
 
 .write-comment-bar {
     min-height: 4rem !important;
@@ -563,6 +564,7 @@ textarea.form-control {
 .body-text {
     margin-bottom: 1%;
     color: var(--text);
+    word-wrap: break-word;
 }
 
 /* ------ Profile ------ */
@@ -599,11 +601,11 @@ textarea.form-control {
     color: var(--text)
 }
 
-.qualities > li {
-    display: flex;
-    flex-direction: row;
-    font-size: 1.5rem;
-}
+    .qualities > li {
+        display: flex;
+        flex-direction: row;
+        font-size: 1.5rem;
+    }
 
 .quality {
     color: var(--logoA);
@@ -611,14 +613,15 @@ textarea.form-control {
     margin-right: 20px;
 }
 
-/* ------ DirectChats ------ */
+/* ------ Chats ------ */
 
 .messages {
-    height: 70%;
+    height: 60rem;
     margin: 0 0 1rem;
+    padding: 1rem;
     background-color: var(--left);
     width: 90%;
-    border-radius: 1rem;
+    border-radius: 10px;
     border: 2px solid var(--logoA);
     overflow-y: scroll;
 }
@@ -626,14 +629,16 @@ textarea.form-control {
 .message-container {
     display: flex;
     align-items: center;
-    gap: 10px; 
-    max-width: 80%;
+    margin: 0 0 0.1rem 0;
+    gap: 10px;
+    max-width: 100%;
 }
 
 .message-content {
     padding: 10px;
     border-radius: 8px;
-    max-width: 100%;
+    max-width: 60%;
+    text-align: left;
 }
 
 .current-user {
@@ -642,9 +647,8 @@ textarea.form-control {
 }
 
 .current-user .message-content {
-    background-color: var(--logoB);
+    background-color: var(--logoA);
     color: white;
-    text-align: right;
 }
 
 .other-user {
@@ -653,9 +657,8 @@ textarea.form-control {
 }
 
 .other-user .message-content {
-    background-color: var(--left);
+    background-color: var(--other-user-text);
     color: black;
-    text-align: left;
 }
 
 .write-message {
@@ -663,30 +666,33 @@ textarea.form-control {
 }
 
 .message-text {
-    padding: 10px;
+    padding: 5px;
     word-wrap: break-word;
     white-space: normal;
 }
 
 .message-image {
     display: block;
-    max-height: 250px;
-    max-height: 250px;
     margin: 1%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 1rem;
     overflow: hidden;
 }
 
+.message-image img {
+    max-width: 100%;
+}
+
 .message-time {
-    position: absolute;
-    bottom: 0;
-    right: 0;
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
-    padding-top: 5px;
+    padding-top: 3px;
     white-space: nowrap;
-    margin-top: 5px;
+    text-align: right;
+}
+
+.other-user .message-time {
+    color: rgba(0, 0, 0, 0.7);
 }
 
 .write-message-container {
@@ -696,6 +702,7 @@ textarea.form-control {
     padding: 10px;
     border-radius: 1rem 0 0 1rem !important;
     border: 1px var(--logoA) solid;
+    background-color: var(--left);
     box-sizing: border-box;
     overflow-y: scroll;
 }
@@ -720,8 +727,8 @@ textarea.form-control {
 }
 
 .image-message-btn {
-    height: 70px;
-    width: 5rem;
+    height: 40px;
+    width: 140px;
     border-radius: 1rem !important;
     outline: none !important;
     box-shadow: none !important;
@@ -730,4 +737,22 @@ textarea.form-control {
     background-color: var(--right);
     color: var(--text);
     border: 1px var(--logoA) solid;
+}
+
+.image-message-container {
+    display: flex;
+    align-items: center;
+}
+
+.image-label {
+    border: 2px solid var(--logoA);
+    padding: 5px;
+    margin-right: 10px;
+    color: var(--text) !important;
+    background-color: var(--right) !important;
+    cursor: pointer;
+}
+
+.message-pfp-hidden {
+    visibility: hidden;
 }

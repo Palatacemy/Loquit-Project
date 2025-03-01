@@ -24,5 +24,6 @@ namespace Loquit.Services.Services.Abstractions
         Task<string> CancelFriendRequest(string senderId, string recieverId);
         Task<IdentityResult> UpdatePreferences(AppUser user, string category, double[] evaluations);
         Task<ChatParticipantUserDTO?> GetChatParticipantUserDTOByIdAsync(string userId);
+        Task<ChatParticipantUserDTO> UpdateChatParticipantUserAsync(ChatParticipantUserDTO userDTO);
     }
 }

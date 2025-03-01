@@ -19,6 +19,7 @@ using Loquit.Services.DTOs;
 using Loquit.Web.Models;
 using Loquit.Services.Services.Abstractions;
 using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
+using System.Runtime.InteropServices;
 
 namespace Loquit.Web.Controllers
 {
@@ -107,20 +108,23 @@ namespace Loquit.Web.Controllers
                 return NotFound();
             }*/
 
-            if (currentUserDTO.Chats.Any(chat => chat.UserId == otherUserDTO.Id))
+            if (currentUserDTO.Chats.Any(chat => chat.Chat.Members.Any(member => member.UserId == otherUserDTO.Id)))
             {
                 return RedirectToAction("Index", "DirectChats");
             }
+
             var directChatDTO = new DirectChatDTO()
             {
                 Members = new List<ChatUserDTO>
                 {
-                    new ChatUserDTO { UserId = currentUserDTO.Id},
-                    new ChatUserDTO { UserId = otherUserDTO.Id}
+                    new ChatUserDTO { UserId = currentUserDTO.Id, TimeOfJoining = DateTime.Now },
+                    new ChatUserDTO { UserId = otherUserDTO.Id, TimeOfJoining = DateTime.Now }
                 }, 
                 Messages = new List<BaseMessageDTO>()
             };
             await _directChatService.AddDirectChatAsync(directChatDTO);
+
+            var currentChatDTO = (await _directChatService.GetDirectChatsAsync()).Last();
 
             /*var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserDTO.Id);
 
@@ -138,8 +142,24 @@ namespace Loquit.Web.Controllers
             };
 
             return View("Index", model);*/
+            
 
-            return RedirectToAction("Index", "DirectChats");
+            var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserId);
+
+            var model = new DirectChatViewModel
+            {
+                ChatsList = new ChatsListViewModel()
+                {
+                    DirectChats = directChatDTOs
+                },
+                CurrentChat = new CurrentChatViewModel()
+                {
+                    CurrentChat = currentChatDTO,
+                    CurrentUser = currentUserDTO
+                }
+            };
+
+            return View("Index", model);
         }
 
         [HttpPost]
@@ -163,52 +183,60 @@ namespace Loquit.Web.Controllers
                 return NotFound("Chat not found.");
             }
 
-            BaseMessageDTO messageDTO;
+            var previousMessage = directChatDTO.Messages.Any()
+                ? directChatDTO.Messages.OrderByDescending(m => m.TimeOfSending).FirstOrDefault()
+                : null;
 
-            switch (model.MessageType)
-            {
-                case "text":
-                    messageDTO = new TextMessageDTO
-                    {
-                        SenderUserId = currentUserDTO.Id,
-                        Text = model.Text,
-                        ChatId = model.ChatId
-                    };
-                    break;
-                case "image" when model.ImageFile != null:
-                    var fileName = await FileUpload.UploadAsync(model.ImageFile, _environment.WebRootPath);
-                    messageDTO = new ImageMessageDTO
-                    {
-                        SenderUserId = currentUserDTO.Id,
-                        PictureUrl = fileName,
-                        ChatId = model.ChatId
-                    };
-                    break;
-                default:
-                    return BadRequest("Invalid message type or missing file.");
-            }
+            BaseMessageDTO messageDTO;
 
             try
             {
-                await _directChatService.AddMessageToChatAsync(directChatDTO, messageDTO);
-                
-                
-                currentUserDTO.MessagesWritten++;
-                await _userManager.UpdateAsync(currentUser);
-
-                var currentChatModel = new CurrentChatViewModel
+                switch (model.MessageType)
                 {
-                    CurrentChat = directChatDTO,
-                    CurrentUser = currentUserDTO
+                    case "text":
+                        messageDTO = new TextMessageDTO
+                        {
+                            SenderUserId = currentUserDTO.Id,
+                            Text = model.Text,
+                            ChatId = model.ChatId,
+                            TimeOfSending = DateTime.Now
+                        };
+                        break;
+                    case "image" when model.ImageFile != null:
+                        var fileName = await FileUpload.UploadAsync(model.ImageFile, _environment.WebRootPath);
+                        messageDTO = new ImageMessageDTO
+                        {
+                            SenderUserId = currentUserDTO.Id,
+                            PictureUrl = fileName,
+                            ChatId = model.ChatId,
+                            TimeOfSending = DateTime.Now
+                        };
+                        break;
+                    default:
+                        return BadRequest("Invalid message type or missing file.");
+                }
+
+                await _directChatService.AddMessageToChatAsync(directChatDTO.Id, messageDTO);
+
+                currentUserDTO.MessagesWritten++;
+                await _userService.UpdateChatParticipantUserAsync(currentUserDTO);
+
+                var messageViewModel = new MessageViewModel
+                {
+                    Message = messageDTO,
+                    SenderUser = currentUserDTO,
+                    PreviousMessage = previousMessage
                 };
 
-                return PartialView("_DirectChatMessagesPartial", currentChatModel);
+                return PartialView("_MessagePartial", messageViewModel);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.InnerException?.Message ?? ex.Message }/*{ success = false, error = ex.Message }*/);
+                return Json(new { success = false, error = ex.Message });
             }
         }
+
+        
 
         public async Task<IActionResult> LoadMessages(int chatId, int lastMessageId)
         {

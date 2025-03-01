@@ -1,0 +1,44 @@
+﻿@using Loquit.Services.DTOs.AbstracionsDTOs;
+@using Loquit.Services.DTOs.MessageTypesDTOs;
+@using Loquit.Web.Models;
+
+@model MessageViewModel
+
+@{
+    var message = Model.Message;
+    var senderUser = Model.SenderUser;
+
+    bool isCurrentUser = (message.SenderUserId == senderUser.Id);
+    string messageClass = isCurrentUser ? "current-user" : "other-user";
+    var previousMessage = Model.PreviousMessage; 
+
+    bool showProfilePicture = previousMessage == null ||
+                              previousMessage.SenderUserId != Model.Message.SenderUserId ||
+                              (Model.Message.TimeOfSending - previousMessage.TimeOfSending) > TimeSpan.FromMinutes(10);
+
+    string messageTime = message.TimeOfSending.ToString("HH:mm");
+}
+
+<div class="message-container @messageClass d-flex">
+
+    <div class="pfp pfp-small @(showProfilePicture ? "" : "message-pfp-hidden") d-flex justify-content-start">
+        @if (showProfilePicture && senderUser.ProfilePictureUrl != null)
+        {
+            <img src="~/uploads/@senderUser.ProfilePictureUrl" alt="Profile Picture" loading="lazy" />
+        }
+    </div>
+
+    <div class="message-content">
+        @if (message is TextMessageDTO textMessage)
+        {
+            <span class="message-text">@textMessage.Text</span>
+        }
+        else if (message is ImageMessageDTO imageMessage)
+        {
+            <div class="message-image">
+                <img src="~/uploads/@imageMessage.PictureUrl" alt="User Image" loading="lazy" />
+            </div>
+        }
+        <div class="message-time">@messageTime</div>
+    </div>
+</div>

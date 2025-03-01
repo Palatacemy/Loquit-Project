@@ -19,7 +19,8 @@ namespace Loquit.Services.Services.Abstractions.ChatTypesAbstractions
         Task UpdateDirectChatAsync(DirectChatDTO directChat);
         Task<List<ChatParticipantUserDTO?>> GetUsersInChatAsync(int chatId);
         Task<List<DirectChatDTO?>> GetChatsForUserAsync(string userId);
-        Task<DirectChatDTO> AddMessageToChatAsync(DirectChatDTO directChatDTO, BaseMessageDTO messageDTO);
+        Task AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO);
+        Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId);
         Task<DirectChatDTO?> GetDirectChatWithMessagesAsync(int chatId);
         Task<List<BaseMessageDTO>> GetMessagesForChatAsync(int chatId);
         Task<List<BaseMessageDTO>> GetMessagesBeforeIdAsync(int chatId, int lastMessageId, int count);

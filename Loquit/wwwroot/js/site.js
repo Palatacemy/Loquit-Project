@@ -1,4 +1,8 @@
-﻿function auto_grow(element) {
+﻿$(function () {
+    scrollToBottom();
+});
+
+function auto_grow(element) {
     element.style.height = "auto";
     element.style.height = (element.scrollHeight) + "px";
 }
@@ -260,56 +264,87 @@ function removeFriend(userId, onSuccess) {
     });
 }
 
-/*function sendMessage(formElement) {
-    var form = $(formElement);
-    var formData = new FormData(formElement);
-
+function sendMessage(event, formData) {
+    event.preventDefault();
+    console.log("Sending message...")
     $.ajax({
-        url: form.attr("action"),
-        type: form.attr("method"),
+        url: "/DirectChats/SendMessage",
+        type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
         success: function (response) {
+            console.log("Success:", response);
             if (response) {
-                $("#messagesContainer").html(response); // Updates chat messages
-                form[0].reset(); // Clears the form after sending a message
+                $('#chatMessages').append(response);
+                scrollToBottom();
             }
         },
-        error: function () {
-            alert("Error sending message.");
+        error: function (xhr, status, error) {
+            console.error("Error:", error);
+            alert('Error: ' + error);
         }
     });
-
-    return false; // Prevents default form submission
 }
 
-$(document).ready(function () {
-    $(".write-message form").submit(function (e) {
-        e.preventDefault();
-        sendMessage(this);
-    });
-});*/
+function sendTextMessage(event) {
+    event.preventDefault();
+    console.log("Text message button clicked!");
+    let $form = $(event.target);
+    let formData = new FormData($form[0]);
+    let textArea = $form.find('textarea[name="Text"]');
 
-/*function getCategoryName(categoryId) {
-
-    let categoryName = "";
-
-    switch (categoryId) {
-        case 0: categoryName = ""; break;
-        case 1: categoryName = "Food"; break;
-        case 2: categoryName = "Music/Art"; break;
-        case 3: categoryName = "Nature"; break;
-        case 4: categoryName = "Pets"; break;
-        case 5: categoryName = "Videogames"; break;
-        case 6: categoryName = "Culture"; break;
-        case 7: categoryName = "Funny"; break;
-        case 8: categoryName = "Factology"; break;
-        default: console.log("Category does not exist");
+    if (textArea.val().trim() === '') {
+        alert('Please enter a message.');
+        return;
     }
 
-    return categoryName;
-}*/
+    sendMessage(event, formData);
+    textArea.val('').trigger('input');
+}
+
+function sendImageMessage(event) {
+    event.preventDefault();
+    console.log("Image message button clicked!");
+    let $form = $(event.target);
+    let formData = new FormData($form[0]);
+    let $imageFileInput = $form.find('input[type="file"]');
+    let $preview = $('#imagePreview');
+    let $sendButton = $('#sendImageButton');
+
+    if (!$imageFileInput[0].files.length) {
+        alert('Please select an image to send.');
+        return;
+    }
+
+    sendMessage(event, formData);
+    $form[0].reset();
+    $preview.hide();
+    $sendButton.hide();
+}
+
+function previewImage(event) {
+    let file = event.target.files[0];
+    let $preview = $('#imagePreview');
+    let $sendButton = $('#sendImageButton');
+
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $preview.attr('src', e.target.result).show();
+            $sendButton.show();
+        };
+        reader.readAsDataURL(file);
+    } else {
+        $preview.hide();
+        $sendButton.hide();
+    }
+}
+
+function scrollToBottom() {
+    const chatContainer = $('#chatMessages');
+    chatContainer.scrollTop(chatContainer[0].scrollHeight);
+}
 
 function updateUrl(inputElement = "") {
     const username = inputElement.value;
@@ -325,3 +360,4 @@ function updateUrl(inputElement = "") {
     window.history.replaceState({}, '', newUrl);
     reloadFriends(username);
 }
+

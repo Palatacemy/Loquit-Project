@@ -141,6 +141,19 @@ namespace Loquit.Services.Services
             return user != null ? _mapper.Map<ChatParticipantUserDTO>(user) : null;
         }
 
+        public async Task<ChatParticipantUserDTO> UpdateChatParticipantUserAsync(ChatParticipantUserDTO userDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userDTO.Id);
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            user.MessagesWritten = userDTO.MessagesWritten;
+            await _userManager.UpdateAsync(user);
+            return _mapper.Map<ChatParticipantUserDTO>(user);
+        }
+
         private int TransformToNumber(string input)
         {
             switch (input)

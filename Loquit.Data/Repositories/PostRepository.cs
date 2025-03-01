@@ -42,7 +42,7 @@ namespace Loquit.Data.Repositories
                 }
 
                 posts = posts
-                    .OrderBy(item => categoryPreferences[TransformToNumber(item.Category)] + item.Evaluations[0] * evaluationPreferences[0] + item.Evaluations[1] * evaluationPreferences[1] + item.Evaluations[2] * evaluationPreferences[2] + item.Evaluations[3] * evaluationPreferences[3] + item.Evaluations[4] * evaluationPreferences[4]/* + Math.Tanh((item.Likes - item.Dislikes) / 10000)*/)
+                    .OrderBy(item => categoryPreferences[TransformToNumber(item.Category)] + item.Evaluations[0] * evaluationPreferences[0] + item.Evaluations[1] * evaluationPreferences[1] + item.Evaluations[2] * evaluationPreferences[2] + item.Evaluations[3] * evaluationPreferences[3] + item.Evaluations[4] * evaluationPreferences[4] + Math.Round(double.Parse($"{(item.Likes - item.Dislikes) / ((item.Likes - item.Dislikes) + 10000)}"), 2))
                     .Take(50)
                     .ToList();
 
@@ -61,9 +61,9 @@ namespace Loquit.Data.Repositories
                     posts = await _context.Posts
                         .ToListAsync();
                 }
-
+                
                 posts = posts
-                    .OrderBy(item => categoryPreferences[TransformToNumber(item.Category)] + item.Evaluations[0] * evaluationPreferences[0] + item.Evaluations[1] * evaluationPreferences[1] + item.Evaluations[2] * evaluationPreferences[2] + item.Evaluations[3] * evaluationPreferences[3] + item.Evaluations[4] * evaluationPreferences[4]/* + Math.Tanh((item.Likes - item.Dislikes) / 10000)*/)
+                    .OrderBy(item => categoryPreferences[TransformToNumber(item.Category)] + item.Evaluations[0] * evaluationPreferences[0] + item.Evaluations[1] * evaluationPreferences[1] + item.Evaluations[2] * evaluationPreferences[2] + item.Evaluations[3] * evaluationPreferences[3] + item.Evaluations[4] * evaluationPreferences[4] + Math.Round(double.Parse($"{(item.Likes - item.Dislikes) / ((item.Likes - item.Dislikes) + 10000)}"), 2))
                     .Take(50)
                     .ToList();
 
