@@ -38,7 +38,7 @@
             <div class="form-group">
                 <input type="hidden" asp-for="ProfilePictureUrl" />
                 <label asp-for="Picture" class="control-label"></label>
-                <input asp-for="Picture" type="file" class="form-control-file" />
+                <input asp-for="Picture" type="file" accept="image/*" class="form-control-file" />
                 <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
              <div class="form-group">

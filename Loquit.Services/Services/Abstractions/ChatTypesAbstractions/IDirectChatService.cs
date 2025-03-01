@@ -13,14 +13,15 @@ namespace Loquit.Services.Services.Abstractions.ChatTypesAbstractions
     public interface IDirectChatService
     {
         Task<List<DirectChatDTO>> GetDirectChatsAsync();
-        Task<DirectChatDTO> GetDirectChatByIdAsync(int id);
+        Task<DirectChatDTO?> GetDirectChatByIdAsync(int chatId, string userId);
         Task AddDirectChatAsync(DirectChatDTO directChat);
         Task DeleteDirectChatByIdAsync(int id);
         Task UpdateDirectChatAsync(DirectChatDTO directChat);
         Task<List<ChatParticipantUserDTO?>> GetUsersInChatAsync(int chatId);
         Task<List<DirectChatDTO?>> GetChatsForUserAsync(string userId);
-        Task AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO);
-        Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId);
+        Task<DirectChatDTO> AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO);
+        Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId, string userId, bool isImage);
+        Task<BaseMessageDTO?> GetMessageByIdAsync(int messageId);
         Task<DirectChatDTO?> GetDirectChatWithMessagesAsync(int chatId);
         Task<List<BaseMessageDTO>> GetMessagesForChatAsync(int chatId);
         Task<List<BaseMessageDTO>> GetMessagesBeforeIdAsync(int chatId, int lastMessageId, int count);

@@ -43,6 +43,15 @@ namespace Loquit.Data.Repositories
             return messages;
         }
 
+        public async Task<DirectChat?> GetDirectChatWithMessagesAndUsersAsync(int chatId)
+        {
+            return await _context.DirectChats
+                .Include(dc => dc.Messages)
+                .Include(dc => dc.Members) 
+                .ThenInclude(cu => cu.User) 
+                .FirstOrDefaultAsync(dc => dc.Id == chatId);
+        }
+
         public async Task<List<BaseMessage>> GetMessagesBeforeIdAsync(int chatId, int lastMessageId, int count)
         {
             var textMessages = await _context.TextMessages

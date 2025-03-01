@@ -60,9 +60,13 @@ namespace Loquit.Services.Services.ChatTypesServices
             await _directChatRepository.DeleteByIdAsync(id);
         }
 
-        public async Task<DirectChatDTO> GetDirectChatByIdAsync(int id)
+        public async Task<DirectChatDTO?> GetDirectChatByIdAsync(int chatId, string userId)
         {
-            var directChat = await _directChatRepository.GetByIdAsync(id);
+            var directChat = await _directChatRepository.GetByIdAsync(chatId);
+            if (directChat == null || !directChat.Members.Any(m => m.UserId == userId))
+            {
+                return null;
+            }
             return _mapper.Map<DirectChatDTO>(directChat);
         }
 
@@ -91,7 +95,7 @@ namespace Loquit.Services.Services.ChatTypesServices
             return _mapper.Map<List<DirectChatDTO?>>(chatUsers.Select(cu => cu.Chat));
         }
 
-        public async Task AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO)
+        public async Task<DirectChatDTO> AddMessageToChatAsync(int chatId, BaseMessageDTO messageDTO)
         {
             var directChat = await _directChatRepository.GetByIdAsync(chatId);
 
@@ -100,9 +104,11 @@ namespace Loquit.Services.Services.ChatTypesServices
             {
                 case TextMessage textMessage:
                     await _textMessageRepository.AddAsync(textMessage);
+                    messageDTO.Id = textMessage.Id;
                     break;
                 case ImageMessage imageMessage:
                     await _imageMessageRepository.AddAsync(imageMessage);
+                    messageDTO.Id = imageMessage.Id;
                     break;
                 default:
                     throw new ArgumentException("Invalid message type");
@@ -110,11 +116,65 @@ namespace Loquit.Services.Services.ChatTypesServices
 
             directChat.Messages.Add(messageEntity);
             await _directChatRepository.UpdateAsync(directChat);
+            return _mapper.Map<DirectChatDTO>(directChat);
         }
 
-        public async Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId)
+        public async Task<bool> DeleteMessageFromChatAsync(int chatId, int messageId, string userId, bool isImage)
         {
-            throw new NotImplementedException();
+            var directChat = await _directChatRepository.GetDirectChatWithMessagesAndUsersAsync(chatId);
+
+            if (directChat?.Messages == null || !directChat.Messages.Any(m => m.Id == messageId))
+            {
+                return false;
+            }
+
+            var chatUser = directChat.Members.FirstOrDefault(cu => cu.UserId == userId);
+            if (chatUser == null)
+            {
+                return false;
+            }
+
+            if (isImage)
+            {
+                var imageMessage = await _imageMessageRepository.GetByIdAsync(messageId);
+                if (imageMessage == null || imageMessage.SenderUserId != userId)
+                {
+                    return false;
+                }
+                directChat.Messages.Remove(imageMessage);
+                await _imageMessageRepository.DeleteByIdAsync(messageId);
+            }
+            else
+            {
+                var textMessage = await _textMessageRepository.GetByIdAsync(messageId);
+                if (textMessage == null || textMessage.SenderUserId != userId)
+                {
+                    return false;
+                }
+                directChat.Messages.Remove(textMessage);
+                await _textMessageRepository.DeleteByIdAsync(messageId);
+            }
+
+            await _directChatRepository.UpdateAsync(directChat);
+
+            return true;
+        }
+
+        public async Task<BaseMessageDTO?> GetMessageByIdAsync(int messageId)
+        {
+            var imageMessage = await _imageMessageRepository.GetByIdAsync(messageId);
+            if (imageMessage != null)
+            {
+                return _mapper.Map<ImageMessageDTO>(imageMessage);
+            }
+
+            var textMessage = await _textMessageRepository.GetByIdAsync(messageId);
+            if (textMessage != null)
+            {
+                return _mapper.Map<TextMessageDTO>(textMessage);
+            }
+
+            return null;
         }
 
         public async Task<DirectChatDTO?> GetDirectChatWithMessagesAsync(int chatId)

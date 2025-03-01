@@ -3,18 +3,18 @@
     public static class FileUpload
     {
         private static readonly string[] ValidImageMimeTypes = { "image/jpeg", "image/png", "image/gif" };
-        private static readonly long MaxFileSize = 10 * 1024 * 1024;
+        private static readonly long MaxFileSize = 15 * 1024 * 1024;
 
         public static async Task<string> UploadAsync(IFormFile picture, string root)
         {
             if (picture.Length > MaxFileSize)
             {
-                throw new InvalidOperationException("File size exceeds the maximum limit.");
+                throw new InvalidOperationException("File size exceeds the maximum limit of 15MB.");
             }
 
             if (!IsValidImageType(picture))
             {
-                throw new InvalidOperationException("Invalid file type. Only images are allowed.");
+                throw new InvalidOperationException("Invalid file type. Only JPEG, PNG and GIF images are allowed.");
             }
 
             var extension = Path.GetExtension(picture.FileName);

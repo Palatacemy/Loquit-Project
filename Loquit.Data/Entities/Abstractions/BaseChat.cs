@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Loquit.Data.Entities.ChatTypes;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Loquit.Data.Entities.Abstractions
     {
         protected BaseChat()
         {
+            //Messages = new List<BaseMessage>();
             Members = new List<ChatUser>();
         }
         public virtual ICollection<ChatUser>? Members { get; set; }

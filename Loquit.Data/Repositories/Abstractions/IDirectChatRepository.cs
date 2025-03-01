@@ -12,6 +12,7 @@ namespace Loquit.Data.Repositories.Abstractions
     {
         Task<DirectChat?> GetDirectChatWithMessagesAsync(int chatId);
         Task<List<BaseMessage>> GetMessagesByChatIdAsync(int chatId);
+        Task<DirectChat?> GetDirectChatWithMessagesAndUsersAsync(int chatId);
         Task<List<BaseMessage>> GetMessagesBeforeIdAsync(int chatId, int lastMessageId, int count);
     }
 }

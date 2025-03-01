@@ -28,7 +28,7 @@
         }
     </div>
 
-    <div class="message-content">
+    <div class="message-content" id="message-@message.Id">
         @if (message is TextMessageDTO textMessage)
         {
             <span class="message-text">@textMessage.Text</span>
@@ -41,4 +41,16 @@
         }
         <div class="message-time">@messageTime</div>
     </div>
+
+    @* @if (isCurrentUser)
+    {
+        <div class="dropdown" style="display: none;">
+            <button class="more-btn btn btn-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img class="more" src="~/img/more.png" loading="lazy" />
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a asp-controller="javascript:void(0)" onclick="deleteMessage('@Model.ChatId', '@message.Id')">Delete</a></li>
+            </ul>
+        </div>
+    } *@
 </div>

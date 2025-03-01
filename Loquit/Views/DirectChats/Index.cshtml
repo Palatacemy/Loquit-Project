@@ -27,16 +27,14 @@
         </div>
     </div>
     <div class="left-container">
-        <div class="lr-container-content d-flex justify-content-start align-items-center" style="height: 90%">
-            @if (Model.ChatsList.DirectChats.Any())
-            {
-                @await Html.PartialAsync("PartialViewDirectChat", Model.CurrentChat)
-            }
-            else
-            {
-                <h3 class="d-flex">No chats available.</h3>
-            }
-        </div>
+        @if (Model.ChatsList.DirectChats.Any())
+        {
+            @await Html.PartialAsync("PartialViewDirectChat", Model.CurrentChat)
+        }
+        else
+        {
+            <h3 class="d-flex">No chats available.</h3>
+        }
     </div>
 </div>
 

@@ -2,6 +2,14 @@
     scrollToBottom();
 });
 
+/*$(function () {
+    $(".message-content[data-is-current-user='True']").on('mouseenter', function () {
+        $(this).find(".dropdown").show();
+    }).on('mouseleave', function () {
+        $(this).find(".dropdown").hide();
+    });
+});*/
+
 function auto_grow(element) {
     element.style.height = "auto";
     element.style.height = (element.scrollHeight) + "px";
@@ -274,10 +282,14 @@ function sendMessage(event, formData) {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log("Success:", response);
             if (response) {
-                $('#chatMessages').append(response);
-                scrollToBottom();
+                if (response.success === false) {
+                    alert(response.error);
+                } else {
+                    console.log("Success:", response);
+                    $('#chatMessages').append(response);
+                    scrollToBottom();
+                }
             }
         },
         error: function (xhr, status, error) {
@@ -290,55 +302,119 @@ function sendMessage(event, formData) {
 function sendTextMessage(event) {
     event.preventDefault();
     console.log("Text message button clicked!");
-    let $form = $(event.target);
-    let formData = new FormData($form[0]);
-    let textArea = $form.find('textarea[name="Text"]');
+    const form = event.target;
+    const textArea = form.querySelector('textarea[name="Text"]');
 
-    if (textArea.val().trim() === '') {
+    if (textArea.value.trim() === '') {
         alert('Please enter a message.');
         return;
     }
 
+    const formData = new FormData(form);
     sendMessage(event, formData);
-    textArea.val('').trigger('input');
+    textArea.value = '';
+    textArea.dispatchEvent(new Event('input'));
 }
 
 function sendImageMessage(event) {
     event.preventDefault();
     console.log("Image message button clicked!");
-    let $form = $(event.target);
-    let formData = new FormData($form[0]);
-    let $imageFileInput = $form.find('input[type="file"]');
-    let $preview = $('#imagePreview');
-    let $sendButton = $('#sendImageButton');
-
-    if (!$imageFileInput[0].files.length) {
+    const form = event.target;
+    const fileInput = form.querySelector('input[type="file"]');
+    const preview = document.getElementById('imagePreview');
+    const sendButton = document.getElementById('sendImageButton');
+    const file = fileInput.files[0];
+    if (!file) {
         alert('Please select an image to send.');
         return;
     }
 
+    if (!validateImageFile(file)) {
+        return;
+    }
+
+    const formData = new FormData(form);
     sendMessage(event, formData);
-    $form[0].reset();
-    $preview.hide();
-    $sendButton.hide();
+    form.reset();
+    preview.style.display = 'none';
+    sendButton.style.display = 'none';
+}
+
+/*function deleteMessage(chatId, messageId) {
+    $.ajax({
+        url: '/DirectChats/DeleteMessage',
+        type: 'POST',
+        data: {
+            chatId: chatId,
+            messageId: messageId
+        },
+        success: function (response) {
+            if (response.success) {
+                $('#message-' + messageId).remove();
+                console.log("Message deleted successfully!")
+            } else {
+                alert('Failed to delete the message');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error:", error);
+            alert('Error: ' + error);
+        }
+    });
+}*/
+
+function openChat(chatId) {
+    var url = new URL(window.location.href);
+    url.searchParams.set("activeChat", chatId);
+    window.history.pushState({}, '', url);
+    $.ajax({
+        url: '/DirectChats/OpenChat',
+        type: 'GET',
+        data: { chatId: chatId },
+        success: function (result) {
+            $('.left-container').html(result);
+            scrollToBottom();
+        },
+        error: function () {
+            alert('Failed to open chat.');
+        }
+    });
 }
 
 function previewImage(event) {
-    let file = event.target.files[0];
-    let $preview = $('#imagePreview');
-    let $sendButton = $('#sendImageButton');
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    const sendButton = document.getElementById('sendImageButton');
 
     if (file) {
-        let reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
-            $preview.attr('src', e.target.result).show();
-            $sendButton.show();
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            sendButton.style.display = 'inline-block';
         };
         reader.readAsDataURL(file);
     } else {
-        $preview.hide();
-        $sendButton.hide();
+        preview.style.display = 'none';
+        sendButton.style.display = 'none';
     }
+}
+
+function validateImageFile(file) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const maxSize = 15 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+        alert("Invalid file type. Only JPEG, PNG, and GIF images are allowed.");
+        return false;
+    }
+
+    if (file.size > maxSize) {
+        alert("File size exceeds the maximum limit of 15MB.");
+        return false;
+    }
+
+    return true;
 }
 
 function scrollToBottom() {

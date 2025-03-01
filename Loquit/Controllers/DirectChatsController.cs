@@ -20,6 +20,7 @@ using Loquit.Web.Models;
 using Loquit.Services.Services.Abstractions;
 using Loquit.Services.Services.Abstractions.ChatTypesAbstractions;
 using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Loquit.Web.Controllers
 {
@@ -64,7 +65,8 @@ namespace Loquit.Web.Controllers
                 return View(noChatsModel);
             }
 
-            var firstChatDTO = directChatDTOs.First();
+            var chatId = HttpContext.Request.Query["activeChat"].ToString();
+            var selectedChat = directChatDTOs.FirstOrDefault(c => c.Id.ToString() == chatId) ?? directChatDTOs.First();
 
             var model = new DirectChatViewModel
             {
@@ -74,7 +76,7 @@ namespace Loquit.Web.Controllers
                 },
                 CurrentChat = new CurrentChatViewModel()
                 {
-                    CurrentChat = firstChatDTO,
+                    CurrentChat = selectedChat,
                     CurrentUser = currentUserDTO
                 }
             };
@@ -216,13 +218,16 @@ namespace Loquit.Web.Controllers
                         return BadRequest("Invalid message type or missing file.");
                 }
 
-                await _directChatService.AddMessageToChatAsync(directChatDTO.Id, messageDTO);
+                var updatedChatDTO = await _directChatService.AddMessageToChatAsync(directChatDTO.Id, messageDTO);
+
 
                 currentUserDTO.MessagesWritten++;
                 await _userService.UpdateChatParticipantUserAsync(currentUserDTO);
 
                 var messageViewModel = new MessageViewModel
                 {
+                    MessageId = messageDTO.Id,
+                    ChatId = updatedChatDTO.Id,
                     Message = messageDTO,
                     SenderUser = currentUserDTO,
                     PreviousMessage = previousMessage
@@ -236,13 +241,59 @@ namespace Loquit.Web.Controllers
             }
         }
 
-        
+        [HttpGet]
+        public async Task<IActionResult> OpenChat(int chatId)
+        {
+            var currentUserId = _userManager.GetUserId(User);
+            if (currentUserId == null)
+            {
+                return Unauthorized();
+            }
+
+            var currentUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(currentUserId);
+
+            var chatDTO = await _directChatService.GetDirectChatByIdAsync(chatId, currentUserId);
+            if (chatDTO == null)
+            {
+                return NotFound("Chat not found");
+            }
+
+            var currentChatViewModel = new CurrentChatViewModel
+            {
+                CurrentChat = chatDTO,
+                CurrentUser = currentUserDTO
+            };
+            return PartialView("PartialViewDirectChat", currentChatViewModel);
+        }
+
+        /*[HttpPost]
+        public async Task<IActionResult> DeleteMessage(int chatId, int messageId)
+        {
+            var currentUserId = _userManager.GetUserId(User);
+            var messageDTO = await _directChatService.GetMessageByIdAsync(messageId);
+
+            if (messageDTO == null)
+            {
+                return Json(new { success = false, message = "Message not found" });
+            }
+
+            bool isImage = messageDTO is ImageMessageDTO;
+
+            var result = await _directChatService.DeleteMessageFromChatAsync(chatId, messageId, currentUserId, isImage);
+
+            if (result)
+            {
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Failed to delete message" });
+        }
 
         public async Task<IActionResult> LoadMessages(int chatId, int lastMessageId)
         {
             var messages = await _directChatService.GetMessagesBeforeIdAsync(chatId, lastMessageId, 50);
             return PartialView("_DirectChatMessagesPartial", messages);
-        }
+        }*/
 
 
         /*[HttpPost]
