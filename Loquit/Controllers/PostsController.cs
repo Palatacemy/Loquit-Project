@@ -212,12 +212,20 @@ namespace Loquit.Web.Controllers
             {
                 return NotFound();
             }
-
+            
             var post = await _postService.GetPostByIdAsync(id.Value);
             if (post == null)
             {
                 return NotFound();
             }
+            /*
+            var comments = post.Comments;
+            foreach (Comment comment in comments)
+            {
+                _commentService.DeleteCommentByIdAsync(comment.Id);
+            }
+            await _postService.UpdatePostAsync(post);
+            */
             await _postService.DeletePostByIdAsync(post.Id);
             return RedirectToAction("Index", "Home");
         }
