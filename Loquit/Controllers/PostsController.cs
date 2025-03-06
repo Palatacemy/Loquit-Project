@@ -157,6 +157,7 @@ namespace Loquit.Web.Controllers
                 IsNsfw = post.IsNsfw,
                 CreatorId = post.CreatorId,
                 TimeOfPosting = post.TimeOfPosting,
+                Category = post.Category
             };
 
             return View(model);
@@ -198,6 +199,7 @@ namespace Loquit.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction("Details", "Posts", new { id = id });
             }
             return View(post);

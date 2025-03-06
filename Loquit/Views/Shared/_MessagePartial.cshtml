@@ -19,7 +19,7 @@
     string messageTime = message.TimeOfSending.ToString("HH:mm");
 }
 
-<div class="message-container @messageClass d-flex">
+<div class="message-container @messageClass">
 
     <div class="pfp pfp-small @(showProfilePicture ? "" : "message-pfp-hidden") d-flex justify-content-start">
         @if (showProfilePicture && senderUser.ProfilePictureUrl != null)
@@ -28,7 +28,7 @@
         }
     </div>
 
-    <div class="message-content" id="message-@message.Id">
+    <div class="message-content @(showProfilePicture ? "message-box-corner" : "")" @* id="message-@message.Id" *@>
         @if (message is TextMessageDTO textMessage)
         {
             <span class="message-text">@textMessage.Text</span>

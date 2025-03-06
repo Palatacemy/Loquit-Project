@@ -39,7 +39,7 @@ namespace Loquit.Web.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? activeChatId)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
@@ -65,8 +65,9 @@ namespace Loquit.Web.Controllers
                 return View(noChatsModel);
             }
 
-            var chatId = HttpContext.Request.Query["activeChat"].ToString();
-            var selectedChat = directChatDTOs.FirstOrDefault(c => c.Id.ToString() == chatId) ?? directChatDTOs.First();
+            var selectedChat = activeChatId.HasValue
+                ? directChatDTOs.FirstOrDefault(c => c.Id == activeChatId.Value)
+                : directChatDTOs.First();
 
             var model = new DirectChatViewModel
             {
@@ -128,40 +129,7 @@ namespace Loquit.Web.Controllers
 
             var currentChatDTO = (await _directChatService.GetDirectChatsAsync()).Last();
 
-            /*var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserDTO.Id);
-
-            var model = new DirectChatViewModel
-            {
-                ChatsList = new ChatsListViewModel()
-                {
-                    DirectChats = directChatDTOs
-                },
-                CurrentChat = new CurrentChatViewModel()
-                {
-                    CurrentChat = directChatDTO,
-                    CurrentUser = currentUserDTO
-                }
-            };
-
-            return View("Index", model);*/
-            
-
-            var directChatDTOs = await _directChatService.GetChatsForUserAsync(currentUserId);
-
-            var model = new DirectChatViewModel
-            {
-                ChatsList = new ChatsListViewModel()
-                {
-                    DirectChats = directChatDTOs
-                },
-                CurrentChat = new CurrentChatViewModel()
-                {
-                    CurrentChat = currentChatDTO,
-                    CurrentUser = currentUserDTO
-                }
-            };
-
-            return View("Index", model);
+            return RedirectToAction("Index", "DirectChats", new { activeChatId = currentChatDTO.Id });
         }
 
         [HttpPost]
@@ -242,7 +210,7 @@ namespace Loquit.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OpenChat(int chatId)
+        public async Task<IActionResult> OpenChat(int? activeChatId)
         {
             var currentUserId = _userManager.GetUserId(User);
             if (currentUserId == null)
@@ -252,7 +220,7 @@ namespace Loquit.Web.Controllers
 
             var currentUserDTO = await _userService.GetChatParticipantUserDTOByIdAsync(currentUserId);
 
-            var chatDTO = await _directChatService.GetDirectChatByIdAsync(chatId, currentUserId);
+            var chatDTO = await _directChatService.GetDirectChatByIdAsync(activeChatId.Value, currentUserId);
             if (chatDTO == null)
             {
                 return NotFound("Chat not found");

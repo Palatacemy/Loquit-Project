@@ -553,12 +553,14 @@ textarea {
     }
 
 .write-comment-bar {
-    min-height: 4rem !important;
+    min-height: 60px !important;
+    max-height: 12rem;
     background-color: var(--right) !important;
     border-radius: 1rem 0 0 1rem !important;
     width: 43rem;
     border: 1px var(--logoA) solid;
-    padding: 0 0.5rem;
+    padding: 10px;
+    overflow-y: scroll;
 }
 
 
@@ -617,7 +619,7 @@ textarea {
 /* ------ Chats ------ */
 
 .messages {
-    height: 38rem;
+    height: 80vh;
     margin: 0 0 1rem;
     padding: 1rem;
     background-color: var(--left);
@@ -629,7 +631,7 @@ textarea {
 
 .message-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin: 0 0 0.1rem 0;
     gap: 10px;
     max-width: 100%;
@@ -637,7 +639,6 @@ textarea {
 
 .message-content {
     padding: 10px;
-    border-radius: 8px;
     max-width: 60%;
     text-align: left;
 }
@@ -647,7 +648,14 @@ textarea {
     flex-direction: row-reverse;
 }
 
+    .current-user .message-content.message-box-corner {
+        border-radius: 16px 0 16px 16px;
+        background-color: var(--logoA);
+        color: white;
+    }
+
     .current-user .message-content {
+        border-radius: 16px;
         background-color: var(--logoA);
         color: white;
     }
@@ -657,7 +665,14 @@ textarea {
     flex-direction: row;
 }
 
+    .other-user .message-content.message-box-corner {
+        border-radius: 0 16px 16px 16px;
+        background-color: var(--logoA);
+        color: white;
+    }
+
     .other-user .message-content {
+        border-radius: 16px;
         background-color: var(--other-user-text);
         color: white;
     }
@@ -673,15 +688,17 @@ textarea {
 }
 
 .message-image {
-    display: block;
+    display: flex;
+    justify-content: center;
     margin: 1%;
-    object-fit: contain;
     border-radius: 1rem;
     overflow: hidden;
 }
 
     .message-image img {
+        max-height: 20rem;
         max-width: 100%;
+        object-fit: contain;
     }
 
 .message-time {

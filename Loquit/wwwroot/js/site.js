@@ -1,18 +1,27 @@
 ﻿$(function () {
     scrollToBottom();
+    var activeChatId = sessionStorage.getItem('activeChatId');
+    if (activeChatId) {
+        openChat(activeChatId);
+    }
 });
-
-/*$(function () {
-    $(".message-content[data-is-current-user='True']").on('mouseenter', function () {
-        $(this).find(".dropdown").show();
-    }).on('mouseleave', function () {
-        $(this).find(".dropdown").hide();
-    });
-});*/
 
 function auto_grow(element) {
     element.style.height = "auto";
     element.style.height = (element.scrollHeight) + "px";
+}
+
+function auto_grow_commentBar(element) {
+    element.style.height = "auto";
+    element.style.height = (element.scrollHeight) + "px";
+
+    const computedStyle = window.getComputedStyle(element);
+    const minHeight = parseFloat(computedStyle.minHeight) + 10;
+    if (element.scrollHeight <= minHeight) {
+        element.style.setProperty("border-radius", "1rem 0 0 1rem", "important");
+    } else {
+        element.style.setProperty("border-radius", "1rem 0 1rem 1rem", "important");
+    }
 }
 
 function auto_grow_messageContainer(element) {
@@ -272,6 +281,7 @@ function removeFriend(userId, onSuccess) {
     });
 }
 
+
 function sendMessage(event, formData) {
     event.preventDefault();
     console.log("Sending message...")
@@ -364,18 +374,17 @@ function sendImageMessage(event) {
 }*/
 
 function openChat(chatId) {
-    var url = new URL(window.location.href);
-    url.searchParams.set("activeChat", chatId);
-    window.history.pushState({}, '', url);
+    sessionStorage.setItem('activeChatId', chatId);
     $.ajax({
-        url: '/DirectChats/OpenChat',
+        url: "/DirectChats/OpenChat?activeChatId=" + chatId,
         type: 'GET',
-        data: { chatId: chatId },
         success: function (result) {
             $('.left-container').html(result);
+            window.history.replaceState({}, '', '/DirectChats');
             scrollToBottom();
         },
         error: function () {
+            console.error("Error: ", error);
             alert('Failed to open chat.');
         }
     });
@@ -420,6 +429,10 @@ function validateImageFile(file) {
 function scrollToBottom() {
     const chatContainer = $('#chatMessages');
     chatContainer.scrollTop(chatContainer[0].scrollHeight);
+}
+
+function clearSessionStorage() {
+    sessionStorage.removeItem('activeChatId');
 }
 
 function updateUrl(inputElement = "") {

@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-between flex-row">
                 <div class="post-header-text">
                     <div class="post-header-info d-flex flex-row justify-content-between">
-                        <a asp-controller="DirectChats" asp-action="OpenChat" asp-route-chatId="@item.Id" class="friend-user d-flex flex-row" onclick="openChat('@item.Id'); return false;">
+                        <a asp-controller="DirectChats" asp-action="OpenChat" asp-route-activeChatId="@item.Id" class="friend-user d-flex flex-row" onclick="openChat('@item.Id'); return false;">
                             <span class="pfp pfp-small"><img src="~/uploads/@user.ProfilePictureUrl" loading="lazy" /></span>
                             <span class="post-name">@user.UserName</span>
                         </a>

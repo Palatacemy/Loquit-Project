@@ -53,7 +53,6 @@ else {
                             <span class="pfp pfp-small"><img src="~/uploads/@item.ProfilePictureUrl" loading="lazy" /></span>
                             <span class="post-name">@item.UserName</span>
                         </a>
-
                         <form asp-route-id="@item.Id" asp-controller="DirectChats" asp-action="CreateChat" method="post">
                             <button type="submit" class="friend-header-option">
                                 <img class="option comment" src="~/img/Comment.png" loading="lazy" />

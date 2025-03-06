@@ -9,7 +9,7 @@
         <div class="messages" id="chatMessages">
             <partial name="_DirectChatMessagesPartial" model="Model" />
         </div>
-        <div style="height: 20%">
+        <div style="max-width: 90%; max-height: 20%">
             <partial name="_TextMessageFormPartial" model="new SendMessageViewModel() { ChatId = Model.CurrentChat.Id }" />
             <partial name="_ImageMessageFormPartial" model="new SendMessageViewModel() { ChatId = Model.CurrentChat.Id }" />
         </div>
