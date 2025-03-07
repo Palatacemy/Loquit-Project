@@ -110,7 +110,7 @@
     {
         <form asp-controller="Comments" asp-action="Create" method="post" class="write-comment d-flex justify-content-center flex-row" onsubmit="return validateForm()">
             <div>
-                <textarea name="Text" oninput="auto_grow_commentBar(this)" TextMode="MultiLine" class="write-comment-bar"></textarea>
+            <textarea name="Text" oninput="auto_grow_commentBar(this)" TextMode="MultiLine" class="write-comment-bar" placeholder="Write a comment..."></textarea>
             </div>
             <input type="hidden" name="CommenterId" value="@currentUser.Id"/>
             <input type="hidden" name="PostId" value="@Model.Id" />

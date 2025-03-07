@@ -188,16 +188,18 @@ namespace Loquit.Web.Controllers
 
                 var updatedChatDTO = await _directChatService.AddMessageToChatAsync(directChatDTO.Id, messageDTO);
 
-
+                currentUserDTO.SentMessages.Add(messageDTO);
                 currentUserDTO.MessagesWritten++;
-                await _userService.UpdateChatParticipantUserAsync(currentUserDTO);
+                var updatedCurrentUserDTO = await _userService.UpdateChatParticipantUserAsync(currentUserDTO);
 
                 var messageViewModel = new MessageViewModel
                 {
                     MessageId = messageDTO.Id,
-                    ChatId = updatedChatDTO.Id,
                     Message = messageDTO,
-                    SenderUser = currentUserDTO,
+                    ChatId = updatedChatDTO.Id,
+                    Chat = updatedChatDTO,
+                    SenderUser = updatedCurrentUserDTO,
+                    CurrentUser = updatedCurrentUserDTO,
                     PreviousMessage = previousMessage
                 };
 

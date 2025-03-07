@@ -1,4 +1,5 @@
 ﻿using Loquit.Data.Entities;
+using Loquit.Services.DTOs.AbstracionsDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Loquit.Services.DTOs
         public string? LastName { get; set; }
         public string? Description { get; set; }
         public virtual List<ChatUserDTO>? Chats { get; set; }
+        public virtual List<BaseMessageDTO> SentMessages { get; set; }
         public virtual List<ChatParticipantUserDTO>? Friends { get; set; }
         public int MessagesWritten { get; set; }
     }

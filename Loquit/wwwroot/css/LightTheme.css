@@ -631,7 +631,7 @@ textarea {
 .message-container {
     display: flex;
     align-items: flex-start;
-    margin: 0 0 0.1rem 0;
+    margin: 0 0 0.5rem 0;
     gap: 10px;
     max-width: 100%;
 }
@@ -666,8 +666,8 @@ textarea {
 
     .other-user .message-content.message-box-corner {
         border-radius: 0 16px 16px 16px;
-        background-color: var(--logoA);
-        color: white;
+        background-color: var(--other-user-text);
+        color: black;
     }
 
     .other-user .message-content {

@@ -12,12 +12,16 @@
     BaseMessageDTO? previousMessage = null;
 }
 
-@foreach (var message in Model.CurrentChat.Messages)
+@foreach (var message in Model.CurrentChat.Messages.OrderBy(m => m.TimeOfSending))
 {
+    var senderUser = Model.CurrentChat.Members
+        .FirstOrDefault(m => m.UserId == message.SenderUserId)?.User;
+
     var messageModel = new MessageViewModel
     {
         Message = message,
-        SenderUser = Model.CurrentUser,
+        SenderUser = senderUser,
+        CurrentUser = Model.CurrentUser,
         PreviousMessage = previousMessage
     };
 

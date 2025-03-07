@@ -7,8 +7,9 @@
 @{
     var message = Model.Message;
     var senderUser = Model.SenderUser;
+    var currentUser = Model.CurrentUser;
 
-    bool isCurrentUser = (message.SenderUserId == senderUser.Id);
+    bool isCurrentUser = (message.SenderUserId == currentUser.Id);
     string messageClass = isCurrentUser ? "current-user" : "other-user";
     var previousMessage = Model.PreviousMessage; 
 
@@ -21,7 +22,7 @@
 
 <div class="message-container @messageClass">
 
-    <div class="pfp pfp-small @(showProfilePicture ? "" : "message-pfp-hidden") d-flex justify-content-start">
+    <div class="pfp pfp-small @(showProfilePicture ? "" : "message-pfp-hidden") d-flex justify-content-center">
         @if (showProfilePicture && senderUser.ProfilePictureUrl != null)
         {
             <img src="~/uploads/@senderUser.ProfilePictureUrl" alt="Profile Picture" loading="lazy" />
