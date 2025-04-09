@@ -172,7 +172,6 @@ namespace Loquit.Web.Controllers
             {
                 return NotFound();
             }
-            //DateTime dt = _postService.GetTimeOfPostingAsync(id).Result;
             if (ModelState.IsValid)
             {
                 if (post.Picture != null && post.Picture.Length > 0)
@@ -182,8 +181,6 @@ namespace Loquit.Web.Controllers
                 }
                 post.IsEdited = true;
                 post.Evaluations = _postService.Evaluate(post);
-                //post.TimeOfPosting = dt;
-                post.TimeOfPosting = DateTime.Now;
                 try
                 {
                     await _postService.UpdatePostAsync(post);

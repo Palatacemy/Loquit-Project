@@ -17,7 +17,7 @@
                               previousMessage.SenderUserId != Model.Message.SenderUserId ||
                               (Model.Message.TimeOfSending - previousMessage.TimeOfSending) > TimeSpan.FromMinutes(10);
 
-    string messageTime = message.TimeOfSending.ToString("HH:mm");
+    string messageTime = message.TimeOfSending.ToString("dd.MM.yyyy HH:mm");
 }
 
 <div class="message-container @messageClass">
@@ -40,7 +40,7 @@
                 <img src="~/uploads/@imageMessage.PictureUrl" alt="User Image" loading="lazy" />
             </div>
         }
-        <div class="message-time">@messageTime</div>
+        <div class="message-time" id="message-time" value="@messageTime">@messageTime</div>
     </div>
 
     @* @if (isCurrentUser)

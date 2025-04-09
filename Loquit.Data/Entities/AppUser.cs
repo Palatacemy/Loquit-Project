@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace Loquit.Data.Entities
 {
@@ -36,8 +37,11 @@ namespace Loquit.Data.Entities
             PostsWritten = 0;
             MessagesWritten = 0;
         }
+        [DisplayName("First name")]
         public string? FirstName { get; set; }
+        [DisplayName("Last name")]
         public string? LastName { get; set; }
+        [DisplayName("Date of birth")]
         public DateOnly? DateOfBirth { get; set; }
         public string? Description { get; set; }
         public string? ProfilePictureUrl { get; set; }
@@ -54,6 +58,7 @@ namespace Loquit.Data.Entities
         public double[] EvaluationPreferences { get; set; }
         public int[] RecentlyOpenedPostsIds { get; set; }
         public bool AllowNsfw { get; set; }
+        [DisplayName("Color theme")]
         public int ColorThemeId { get; set; }
         public virtual ICollection<FriendRequest>? FriendRequestsSent { get; set; }
         public virtual ICollection<FriendRequest>? FriendRequestsReceived { get; set; }

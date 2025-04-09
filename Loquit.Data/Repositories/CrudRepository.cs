@@ -65,7 +65,7 @@ namespace Loquit.Data.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            //_context.Entry(entity).State = EntityState.Modified;
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }

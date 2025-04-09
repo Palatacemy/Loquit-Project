@@ -60,7 +60,7 @@ namespace Loquit.Data.Seeders
                     {
                         Title = $"[$Test #{k}$] ",
                         BodyText = "booodyyyy",
-                        CreatorId = userManager.FindByEmailAsync(algorhytmtestuser.Email).Id.ToString(),
+                        CreatorId = (await userManager.FindByEmailAsync(algorhytmtestuser.Email)).Id,
                         Category = GetStringByNumber(j % 9),
                         IsNsfw = d1,
                         IsSpoiler = d2

@@ -6,34 +6,59 @@
     }
 });
 
+/*document.addEventListener('DOMContentLoaded', () => {
+    const messages = document.getElementById('chatMessages');
+    const today = new Date();
+    const formattedToday = today.toLocaleDateString(); // This will format the date as 'MM/DD/YYYY'
+
+    let lastDate = today;
+
+    messages.forEach(message => {
+        let messageTime = message.getElementById('message-time').getAttribute('value');
+        if (messageTime !== lastDate) {
+            const dateSeparator = document.createElement('div');
+            dateSeparator.className = 'date-separator';
+            dateSeparator.textContent = `Messages from ${messageTime}`;
+            messages.appendChild(dateSeparator);
+            lastDate = message.getElementById('message-time');
+        }
+
+        *//*const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.textContent = message.text;
+        chatBox.appendChild(messageDiv);*//*
+    });
+
+});*/
+
 function auto_grow(element) {
-    element.style.height = "auto";
-    element.style.height = (element.scrollHeight) + "px";
+    element.style.height = 'auto';
+    element.style.height = (element.scrollHeight) + 'px';
 }
 
 function auto_grow_commentBar(element) {
-    element.style.height = "auto";
-    element.style.height = (element.scrollHeight) + "px";
+    element.style.height = 'auto';
+    element.style.height = (element.scrollHeight) + 'px';
 
     const computedStyle = window.getComputedStyle(element);
     const minHeight = parseFloat(computedStyle.minHeight) + 10;
     if (element.scrollHeight <= minHeight) {
-        element.style.setProperty("border-radius", "1rem 0 0 1rem", "important");
+        element.style.setProperty('border-radius', '1rem 0 0 1rem', 'important');
     } else {
-        element.style.setProperty("border-radius", "1rem 0 1rem 1rem", "important");
+        element.style.setProperty('border-radius', '1rem 0 1rem 1rem', 'important');
     }
 }
 
 function auto_grow_messageContainer(element) {
-    element.style.height = "auto";
-    element.style.height = (element.scrollHeight + 2) + "px";
+    element.style.height = 'auto';
+    element.style.height = (element.scrollHeight + 2) + 'px';
 
     const computedStyle = window.getComputedStyle(element);
     const minHeight = parseFloat(computedStyle.minHeight) + 10;
     if (element.scrollHeight <= minHeight) {
-        element.style.setProperty("border-radius", "1rem 0 0 1rem", "important");
+        element.style.setProperty('border-radius', '1rem 0 0 1rem', 'important');
     } else {
-        element.style.setProperty("border-radius", "1rem 0 1rem 1rem", "important");
+        element.style.setProperty('border-radius', '1rem 0 1rem 1rem', 'important');
     }
 }
 

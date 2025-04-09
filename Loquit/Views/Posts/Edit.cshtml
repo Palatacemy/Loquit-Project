@@ -38,6 +38,12 @@
                 </label>
             </div>
             <input type="hidden" asp-for="CreatorId" />
+            <input type="hidden" asp-for="Category" />
+            <input type="hidden" asp-for="TimeOfPosting" />
+            @if (Model.Category == null)
+            {
+                Model.Category = "None";
+            }
             <div class="form-group form-button">
                 <input type="submit" value="Edit" class="highlighted-button create-post-btn btn btn-primary" />
             </div>
